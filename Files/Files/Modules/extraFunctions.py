@@ -1,5 +1,6 @@
 import math
 import time
+from csv import writer
 
 ## Function to Scroll down a webpage 
 #
@@ -16,3 +17,9 @@ def auto_scroll(driver):
         driver.execute_script(scroll)
         time.sleep(3)
         z=z+10000
+
+######To Append Data In the file
+def append_data(DataList,path):
+    with open(path, 'a+', newline='',encoding="utf-8") as write_obj:
+        csv_writer = writer(write_obj)
+        csv_writer.writerow(DataList)

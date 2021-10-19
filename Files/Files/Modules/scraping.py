@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from selenium import webdriver
 from Modules import extraFunctions
 import time
 #
@@ -102,3 +103,27 @@ def getAtrrib(url,driver):
             DataList = [url,Vidname,ChanName,Subs,Vidviews,VidDate,VidDuration,VidLikes,VidDislikes,NumCom]
             break
     return DataList
+#
+## Scrapes Completely
+#
+def scrape(keyWords,driver,path):
+    index = 0 
+    for i in range(len(keyWords)):
+        driver.get("https://www.youtube.com/results?search_query="+keyWords[i])
+        ###
+        ###scrolling  the page
+        ###
+        extraFunctions.auto_scroll(driver)
+        ###
+        ###Getting links
+        ###
+        content = driver.page_source
+        soup = BeautifulSoup(content)
+
+        List_href=getLinks(driver,keyWords[i])
+        print("NUMBER OF LINKS",len(List_href))
+        for link in List_href:     
+            DataList=getAtrrib("https://www.youtube.com/"+link,driver)
+            if(DataList!=None):
+                extraFunctions.append_data(DataList,path)
+                print(DataList)
