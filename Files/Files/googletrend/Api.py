@@ -5,4 +5,5 @@ pytrend = TrendReq()
 # Get Google Hot Trends data
 def get_keyword():
     df = pytrend.trending_searches(pn="united_states")
-    return df
+    return df[0].tolist()
+#Returns a list of trending keywords

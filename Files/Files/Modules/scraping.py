@@ -32,7 +32,7 @@ def getLinks(driver,keyWords):
 #
 def getAtrrib(url,driver):
     driver.get(url)
-    driver.execute_script("window.scrollTo(0, 450)")
+    driver.execute_script("window.scrollTo(0, 550)")
     time.sleep(5)
     content = driver.page_source
     soup = BeautifulSoup(content)
