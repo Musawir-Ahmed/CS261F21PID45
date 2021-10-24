@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 #Importing Class OF SearchScreen
 from SearchScreen import Ui_SearchFilterWindow
+from GraphScreen import Ui_GraphScreen
 
 class Ui_MainWindow(object):
     
@@ -22,6 +23,14 @@ class Ui_MainWindow(object):
         self.window2.show()
     #End
 
+    # Function to open Graph plotting Screen
+    def GraphPltScreen(self):
+        Ui_GraphScreen.store_mainrefrence("s",Ui_MainWindow)
+        self.window3 = QtWidgets.QMainWindow()
+        self.ui = Ui_GraphScreen()
+        self.ui.setupUi(self.window3)
+        self.window3.show()
+    #End
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -89,12 +98,17 @@ class Ui_MainWindow(object):
         self.SearchFilterButton.setObjectName("SearchFilterButton")
         self.SearchFilterButton.clicked.connect(self.SearchScreen)
         self.SearchFilterButton.clicked.connect(MainWindow.hide)
-        ####
+        ####Here to connect to graph plotting window
         ##
         #
         self.PlotGraphButton = QtWidgets.QPushButton(self.centralwidget)
         self.PlotGraphButton.setGeometry(QtCore.QRect(520, 90, 341, 31))
         self.PlotGraphButton.setObjectName("PlotGraphButton")
+        self.PlotGraphButton.clicked.connect(self.GraphPltScreen)
+        self.PlotGraphButton.clicked.connect(MainWindow.hide)
+        ###
+        ##
+        #
         self.PlotGraphButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.PlotGraphButton_2.setGeometry(QtCore.QRect(910, 90, 235, 31))
         self.PlotGraphButton_2.setObjectName("PlotGraphButton_2")
