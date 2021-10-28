@@ -15,6 +15,8 @@ def insertion_Sort(A,SortType):
                 A[j+1]=A[j]
                 j-=1 
         A[j+1] = A[key]
+
+
 ###Merge Sort
 ##
 #
@@ -57,6 +59,8 @@ def Merge(A,p,q,r,SortType):
             else:
                 A[k] = R[j]
                 j+=1
+
+
 ###Quick Sort
 ##
 #
@@ -83,6 +87,8 @@ def partition(arr,low,high,SortType):
     arr[i+1],arr[high] = arr[high],arr[i+1]
     
     return i+1
+
+
 ###Strand Sort
 ##
 #
@@ -140,6 +146,8 @@ def strand_Sort(inArr,SortType):
         outputarr = merge_strand(newarr,outputarr,SortType)
         
     return outputarr
+
+
 ###Radix Sort
 ##
 #
@@ -200,6 +208,7 @@ def redix_sort(passed_array,SortType):
         return passed_array
     return list(reversed(passed_array))
 
+
 ###Pigeonhole Sort
 ##
 #
@@ -228,6 +237,8 @@ def pigeonhole_Sort(A,SortType):
     if SortType == "Ascending":
         return A
     return list(reversed(A))
+
+
 ###Cocktail Sort
 ##
 #
@@ -257,4 +268,178 @@ def cocktail_Sort(A,SortType):
     if SortType == "Ascending":
         return A
     return list(reversed(A))
+
+
+#####
+#         
+#Selection sort
+def selection_sort(Array,sorttype):
+
+    expression=None
+    
+    if(sorttype=="Ascending"):
+        expression="Array[index]>Array[y]"
+    else:
+        expression="Array[index]<Array[y]"
+
+    for x in range(0,len(Array)):
+        index=x
+        for y in range(x+1,len(Array)):
+            if(eval(expression)):
+                index=y 
+        temp=Array[index]
+        Array[index]=Array[x]
+        Array[x]=temp
+    return Array   
+
+
+#####
+#
+#buuble sort algorithm
+def Buble_sort(Array,sorttype):
+    expression=None
+    
+    if(sorttype=="Ascending"):
+        expression="Array[y]<Array[x]"
+    else:
+        expression="Array[y]>Array[x]"
+
+    for x in range(0,len(Array)):
+        for y in range(x+1,len(Array)):
+            if(eval(expression)):
+                temp=Array[y]
+                Array[y]=Array[x]
+                Array[x]=temp
+    return Array
+
+
+#####
+#
+#Counting Sort
+def counting_sort(passed_array,sorttype):
+    min_vallue=min(passed_array)
+
+    if(min_vallue<0):
+        for x in range(0,len(passed_array)):
+            passed_array[x]=passed_array[x]-(min_vallue)
+    
+    max_value=max(passed_array)+1
+    counting_array=[0]*max_value
+    resultant_array=[0]*len(passed_array)
+
+    for x in range(0,len(passed_array)):
+        index=passed_array[x]
+        counting_array[index]=counting_array[index]+1
+
+
+    for x in range(0,len(counting_array)-1):
+        counting_array[x+1]=counting_array[x+1]+counting_array[x]
         
+    for x in range(len(passed_array)-1,-1,-1):
+        index=passed_array[x]
+        sorted_index=counting_array[index]
+        counting_array[index]=counting_array[index]-1
+        resultant_array[sorted_index-1]=index
+    if(min_vallue<0):
+        for x in range(0,len(resultant_array)):
+            resultant_array[x]=resultant_array[x]+(min_vallue)
+    
+    if(sorttype!="Ascending"):
+        resultant_array.reverse()
+
+    return resultant_array
+
+
+#####
+##
+#Shell Sort
+def shellsort(Array,sorttype):
+    expression1=None
+    expression2=None
+    if(sorttype=="Ascending"):
+        expression1="Array[index+gap]<Array[index]"
+        expression2="Array[prevous_indexes - gap] > Array[prevous_indexes]"
+    else:
+        expression1="Array[index+gap]>Array[index]"
+        expression2="Array[prevous_indexes - gap] < Array[prevous_indexes]"
+
+    gap=int(len(Array)/2)
+    while gap>0:
+        index=0
+        while (gap+index) < len(Array):
+            if(eval(expression1)):
+                Array[index],Array[index+gap]=Array[index+gap],Array[index]
+			
+            prevous_indexes=index
+            
+            while prevous_indexes - gap >= 0:
+                
+                if eval(expression2):
+                    Array[prevous_indexes-gap],Array[prevous_indexes] = Array[prevous_indexes],Array[prevous_indexes-gap]
+				
+                prevous_indexes =prevous_indexes-1
+
+            index=index+1
+
+        gap=int(gap/2)
+
+    return Array
+
+
+#####
+#
+#Comb Sort
+def Combsort(Array,sorttype):
+    expression=None
+    if(sorttype!="Ascending"):
+        expression="Array[index] < Array[gap+index]"
+    else:
+        expression="Array[index] > Array[gap+index]"
+
+
+    gap=int(len(Array))
+    while gap>0:
+        index=0
+        while (gap+index)<len(Array):
+            if eval(expression) :
+                Array[index],Array[index+gap]=Array[index+gap],Array[index]
+            index=index+1
+        gap=int(gap/1.3)
+
+
+    return Array
+
+
+######
+###
+#CycleSort
+def cyclesort(Array,sorttype):
+    expression=None
+    if(sorttype=="Ascending"):
+        expression="Array[x]<value"
+    else:
+        expression="Array[x]>value"
+    for index in range(0,len(Array)):
+        value=Array[index]
+        current_index=index
+        for x in range(index+1,len(Array)):
+            if(eval(expression)):
+                current_index=current_index+1
+        
+        if(current_index!=index):
+            while value==Array[current_index]:
+                current_index=current_index+1
+
+            Array[current_index],value=value,Array[current_index]
+
+            while current_index!=index:
+                current_index=index
+                for x in range(index+1,len(Array)):
+                    if(eval(expression)):
+                        current_index= current_index+1
+
+                while value==Array[current_index]:
+                    current_index=current_index+1
+                Array[current_index],value=value,Array[current_index]
+
+    return Array

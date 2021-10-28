@@ -284,7 +284,7 @@ class Ui_MainWindow(object):
         self.MainTable.horizontalHeader().setHighlightSections(False)
         self.MainTable.horizontalHeader().setMinimumSectionSize(6)
         self.MainTable.horizontalHeader().setSortIndicatorShown(False)
-        self.MainTable.verticalHeader().setVisible(False)
+        self.MainTable.verticalHeader().setVisible(True)
         self.MainTable.verticalHeader().setHighlightSections(False)
         self.line_9 = QtWidgets.QFrame(self.centralwidget)
         self.line_9.setGeometry(QtCore.QRect(10, 609, 1131, 16))
