@@ -3,18 +3,16 @@ import math
 ##
 #
 def insertion_Sort(A,SortType):
-    for i in range(1,len(A)):
-        key = i
+    for i in range(len(A)):
+        key = A[i]
         j = i-1
-        if SortType == "Ascending":
-            while j>-1 and A[j]>A[key]:
-                A[j+1]=A[j]
-                j-=1
-        else:
-            while j>-1 and A[j]<A[key]:
-                A[j+1]=A[j]
-                j-=1 
-        A[j+1] = A[key]
+        while j>-1 and A[j]>=key:
+            A[j+1]=A[j]
+            j-=1
+        A[j+1] = key
+    if SortType == "Ascending":
+        return A
+    return list(reversed(A))
 
 
 ###Merge Sort
@@ -24,12 +22,15 @@ def merge_Sort(A,left,right,SortType):
     if right > left:
         mid = (left + right)//2
         
-        merge_Sort(A,left,mid)
-        merge_Sort(A,mid+1,right)
+        merge_Sort(A,left,mid,SortType)
+        merge_Sort(A,mid+1,right,SortType)
         
-        Merge(A,left,mid,right,SortType)
+        Merge(A,left,mid,right)
+    if SortType=="Ascending":   
+        return A
+    return list(reversed(A))
     
-def Merge(A,p,q,r,SortType):
+def Merge(A,p,q,r):
     n1 = q-p+1
     n2 = r-q
     L = []
@@ -38,57 +39,43 @@ def Merge(A,p,q,r,SortType):
         L.append(A[p+i])
     for j in range(n2):
         R.append(A[q+1+j])
-    L.append(-math.inf)
-    R.append(-math.inf)
+    L.append(math.inf)
+    R.append(math.inf)
     
     i = 0 
     j = 0
 
     for k in range(p,r+1):
-        if SortType == "Ascending":
-            if L[i]>=R[j]:
-                A[k] = L[i]
-                i+=1
-            else:
-                A[k] = R[j]
-                j+=1
+        if L[i]<=R[j]:
+            A[k] = L[i]
+            i+=1
         else:
-            if L[i]<=R[j]:
-                A[k] = L[i]
-                i+=1
-            else:
-                A[k] = R[j]
-                j+=1
-
+            A[k] = R[j]
+            j+=1
 
 ###Quick Sort
 ##
 #
 def quick_Sort(arr,low,high,SortType):
     if low<high:
-        pivot = partition(arr,low,high,SortType)
-        quick_Sort(arr,low,pivot-1)
-        quick_Sort(arr,pivot+1,high)
-    
+        pivot = partition(arr,low,high)
+        quick_Sort(arr,low,pivot-1,SortType)
+        quick_Sort(arr,pivot+1,high,SortType)
+    if SortType == "Ascending":
+        return arr
+    return list(reversed(arr))
 
-def partition(arr,low,high,SortType):
+def partition(arr,low,high):
     pivot = arr[high]
     i = low - 1
     
     for j in range(low,high):
-        if SortType=="Ascending":
-            if  arr[j]<pivot:
-                i+=1
-                arr[i],arr[j] = arr[j], arr[i]
-        else:
-            if  arr[j]>pivot:
-                i+=1
-                arr[i],arr[j] = arr[j], arr[i]
+        if  arr[j]<pivot:
+            i+=1
+            arr[i],arr[j] = arr[j], arr[i] 
     arr[i+1],arr[high] = arr[high],arr[i+1]
     
     return i+1
-
-
 ###Strand Sort
 ##
 #
