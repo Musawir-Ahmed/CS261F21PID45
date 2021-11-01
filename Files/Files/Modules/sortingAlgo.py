@@ -365,9 +365,7 @@ def shellsort(Array,sorttype):
                     Array[prevous_indexes-gap],Array[prevous_indexes] = Array[prevous_indexes],Array[prevous_indexes-gap]
 				
                 prevous_indexes =prevous_indexes-1
-
             index=index+1
-
         gap=int(gap/2)
 
     return Array
@@ -392,7 +390,6 @@ def Combsort(Array,sorttype):
                 Array[index],Array[index+gap]=Array[index+gap],Array[index]
             index=index+1
         gap=int(gap/1.3)
-
 
     return Array
 
@@ -424,9 +421,7 @@ def cyclesort(Array,sorttype):
                 for x in range(index+1,len(Array)):
                     if(eval(expression)):
                         current_index= current_index+1
-
                 while value==Array[current_index]:
                     current_index=current_index+1
                 Array[current_index],value=value,Array[current_index]
-
     return Array
