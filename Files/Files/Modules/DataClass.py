@@ -1,0 +1,11 @@
+class Data:
+    Links=[]
+    VideoNames=[]
+    ChannelName=[]
+    No_of_Subscribers=[]
+    No_of_Views=[]
+    Date=[]
+    Duration=[]
+    Likes=[]
+    Dislikes=[]
+    No_Of_Comments=[]

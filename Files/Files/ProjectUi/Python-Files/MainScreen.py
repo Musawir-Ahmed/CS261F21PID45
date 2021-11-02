@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 #Importing Class OF SearchScreen
 from SearchScreen import Ui_SearchFilterWindow
 from GraphScreen import Ui_GraphScreen
-
+import _thread
 import sys
 sys.path.insert(1, 'Files\Files')
 
@@ -58,6 +58,7 @@ class Ui_MainWindow(object):
         self.label.setScaledContents(True)
         self.label.setIndent(10)
         self.label.setObjectName("label")
+        
         self.SelectAlgorithmcomboBox = QtWidgets.QComboBox(self.centralwidget)
         self.SelectAlgorithmcomboBox.setGeometry(QtCore.QRect(570, 10, 158, 31))
         self.SelectAlgorithmcomboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -98,7 +99,6 @@ class Ui_MainWindow(object):
         self.Amount.setObjectName("Amount")
         ##
         #
-
         self.SearchInTable = QtWidgets.QLineEdit(self.centralwidget)
         self.SearchInTable.setGeometry(QtCore.QRect(570, 50, 341, 31))
         self.SearchInTable.setCursor(QtGui.QCursor(QtCore.Qt.UpArrowCursor))
@@ -108,7 +108,6 @@ class Ui_MainWindow(object):
         self.SearchButton = QtWidgets.QPushButton(self.centralwidget)
         self.SearchButton.setGeometry(QtCore.QRect(1120, 50, 75, 31))
         self.SearchButton.setObjectName("SearchButton")
-
         #Here To Connect to search Filter Window
         ####
         ##
@@ -128,7 +127,20 @@ class Ui_MainWindow(object):
         ###
         ##
         #
-        
+        ####Adding Button To Load Data
+        self.DataLoadcomboBox = QtWidgets.QLineEdit(self.centralwidget)
+        self.DataLoadcomboBox.setGeometry(QtCore.QRect(571, 125, 233, 31))
+        self.DataLoadcomboBox.setCursor(QtGui.QCursor(QtCore.Qt.UpArrowCursor))
+        self.DataLoadcomboBox.setText("")
+        self.DataLoadcomboBox.setObjectName("SearchTitle_Url")
+
+
+        self.LoadDataButton = QtWidgets.QPushButton(self.centralwidget)
+        self.LoadDataButton.setGeometry(QtCore.QRect(810, 125, 100, 31))
+        self.LoadDataButton.setObjectName("LoadData")
+        self.LoadDataButton.clicked.connect(lambda: MainscreenFunctions.Load_Data(self.DataLoadcomboBox.text(),self.MainTable))
+        ####
+
         self.PlotGraphButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.PlotGraphButton_2.setGeometry(QtCore.QRect(960, 90, 235, 31))
         self.PlotGraphButton_2.setObjectName("PlotGraphButton_2")
@@ -235,7 +247,12 @@ class Ui_MainWindow(object):
         self.MainTable.setRowCount(100)
         self.MainTable.setColumnCount(9)
         self.MainTable.setObjectName("MainTable")
+        
         item = QtWidgets.QTableWidgetItem()
+
+        self.MainTable.doubleClicked.connect(lambda: MainscreenFunctions.OpenLink(self.MainTable))
+
+
         item.setTextAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignBottom)
         font = QtGui.QFont()
         font.setBold(True)
@@ -244,6 +261,8 @@ class Ui_MainWindow(object):
         self.MainTable.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignBottom)
+
+
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -299,6 +318,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         item.setFont(font)
         self.MainTable.setHorizontalHeaderItem(8, item)
+
         item = QtWidgets.QTableWidgetItem()
         self.MainTable.setItem(0, 6, item)
         item = QtWidgets.QTableWidgetItem()
@@ -526,11 +546,19 @@ class Ui_MainWindow(object):
         self.SelectAlgorithmcomboBox.setItemText(9, _translate("MainWindow", "Pigeonhole Sort"))
         self.SelectAlgorithmcomboBox.setItemText(10, _translate("MainWindow", "Cycle Sort"))
         self.SelectAlgorithmcomboBox.setItemText(11, _translate("MainWindow", "Cocktail Sort"))
+
+        # self.DataLoadcomboBox.setItemText(0, _translate("MainWindow", "Select File.."))
+        # self.DataLoadcomboBox.setItemText(1, _translate("MainWindow", "ScrapData.csv"))
+        # self.DataLoadcomboBox.setItemText(2, _translate("MainWindow", "User.csv"))
+        self.DataLoadcomboBox.setPlaceholderText(_translate("MainWindow", " Enter File Name"))
+
+
         self.SearchTitle_Url.setPlaceholderText(_translate("MainWindow", " Search Title Or Place Url"))
         self.Amount.setPlaceholderText(_translate("MainWindow", " Enter Ammount"))
         self.pushButton.setText(_translate("MainWindow", "📁 Scrap"))
         self.SearchInTable.setPlaceholderText(_translate("MainWindow", " Search In The Table"))
         self.SearchButton.setText(_translate("MainWindow", "🔎 Search"))
+        self.LoadDataButton.setText(_translate("MainWindow", "Load"))
         self.SearchFilterButton.setText(_translate("MainWindow", "🝖 Search Filter"))
         self.PlotGraphButton.setText(_translate("MainWindow", "📈    Plot Graph"))
         self.PlotGraphButton_2.setText(_translate("MainWindow", "📰  Print"))
