@@ -90,7 +90,7 @@ class Ui_MainWindow(object):
         self.SearchTitle_Url.setObjectName("SearchTitle_Url")
         ####
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(lambda: MainscreenFunctions.Scrap_link_title(self.SearchTitle_Url,self.MainTable,self.Amount))#Here
+        self.pushButton.clicked.connect(lambda: MainscreenFunctions.scrapButton_pressed(self.SearchTitle_Url,self.MainTable,self.Amount))#Here
         ####
         self.Amount = QtWidgets.QLineEdit(self.centralwidget)
         self.Amount.setGeometry(QtCore.QRect(960, 10, 141, 31))
