@@ -9,6 +9,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pandas as pd
+import pyqtgraph as pg
+import numpy as np
+from pyqtgraph.graphicsItems.ScatterPlotItem import Symbols
+import GraphScreen
 
 
 class Ui_GraphScreen(object):
@@ -41,7 +46,6 @@ class Ui_GraphScreen(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-        self.comboBox.addItem("")
         self.graphwidget = PlotWidget(self.centralwidget)
         self.graphwidget.setGeometry(QtCore.QRect(570, 180, 571, 471))
         self.graphwidget.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
@@ -59,7 +63,6 @@ class Ui_GraphScreen(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_2.setGeometry(QtCore.QRect(110, 270, 141, 31))
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
@@ -115,7 +118,6 @@ class Ui_GraphScreen(object):
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
-        self.comboBox_3.addItem("")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(750, 70, 201, 46))
         font = QtGui.QFont()
@@ -150,6 +152,13 @@ class Ui_GraphScreen(object):
         self.PlotGraphButton.setDefault(False)
         self.PlotGraphButton.setFlat(False)
         self.PlotGraphButton.setObjectName("PlotGraphButton")
+        ###
+        ##
+        #
+        self.PlotGraphButton.clicked.connect(lambda: self.PlotGraph(self.comboBox.currentText(),self.comboBox_2.currentText(),self.comboBox_3.currentText()))
+        ###
+        ##
+        #
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
         self.line_3.setGeometry(QtCore.QRect(533, 0, 20, 681))
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
@@ -215,15 +224,13 @@ class Ui_GraphScreen(object):
         GraphScreen.setWindowTitle(_translate("GraphScreen", "YouTube Video Data Analysis"))
         self.comboBox.setItemText(0, _translate("GraphScreen", "Select Graph Type..."))
         self.comboBox.setItemText(1, _translate("GraphScreen", "Line graph"))
-        self.comboBox.setItemText(2, _translate("GraphScreen", "Bar Graph"))
-        self.comboBox.setItemText(3, _translate("GraphScreen", "Scatter Plot"))
+        self.comboBox.setItemText(2, _translate("GraphScreen", "Scatter Plot"))
         self.comboBox_2.setItemText(0, _translate("GraphScreen", "Select Column"))
         self.comboBox_2.setItemText(1, _translate("GraphScreen", "Likes"))
         self.comboBox_2.setItemText(2, _translate("GraphScreen", "Dislikes"))
-        self.comboBox_2.setItemText(3, _translate("GraphScreen", "Duration"))
-        self.comboBox_2.setItemText(4, _translate("GraphScreen", "Subscribers"))
-        self.comboBox_2.setItemText(5, _translate("GraphScreen", "Comments"))
-        self.comboBox_2.setItemText(6, _translate("GraphScreen", "Views"))
+        self.comboBox_2.setItemText(3, _translate("GraphScreen", "Subscribers"))
+        self.comboBox_2.setItemText(4, _translate("GraphScreen", "Comments"))
+        self.comboBox_2.setItemText(5, _translate("GraphScreen", "Views"))
         self.label_2.setText(_translate("GraphScreen", "y-axis"))
         self.label_3.setText(_translate("GraphScreen", "x-axis"))
         self.label_4.setText(_translate("GraphScreen", "y-axis"))
@@ -231,10 +238,9 @@ class Ui_GraphScreen(object):
         self.comboBox_3.setItemText(0, _translate("GraphScreen", "Select Column"))
         self.comboBox_3.setItemText(1, _translate("GraphScreen", "Likes"))
         self.comboBox_3.setItemText(2, _translate("GraphScreen", "Dislikes"))
-        self.comboBox_3.setItemText(3, _translate("GraphScreen", "Duration"))
-        self.comboBox_3.setItemText(4, _translate("GraphScreen", "Subscribers"))
-        self.comboBox_3.setItemText(5, _translate("GraphScreen", "Comments"))
-        self.comboBox_3.setItemText(6, _translate("GraphScreen", "Views"))
+        self.comboBox_3.setItemText(3, _translate("GraphScreen", "Subscribers"))
+        self.comboBox_3.setItemText(4, _translate("GraphScreen", "Comments"))
+        self.comboBox_3.setItemText(5, _translate("GraphScreen", "Views"))
         self.label_6.setText(_translate("GraphScreen", "Plotted Graph"))
         self.label_7.setText(_translate("GraphScreen", "Time Taken To Plot Graph: "))
         self.pltTime.setText(_translate("GraphScreen", "0ms"))
@@ -243,6 +249,116 @@ class Ui_GraphScreen(object):
         self.commandLinkButton_2.setToolTip(_translate("GraphScreen", "<html><head/><body><p align=\"center\"><span style=\" font-family:\'Source Sans Pro,Roboto,San Francisco,Segoe UI,sans-serif\'; font-size:140px; font-weight:400; color:#df000f; background-color:#ffffff;\">←</span></p></body></html>"))
         self.commandLinkButton_2.setText(_translate("GraphScreen", "←"))
         self.commandLinkButton_2.setShortcut(_translate("GraphScreen", "Backspace"))
+
+    def PlotGraph(self,graphtype,col1,col2):
+        self.graphwidget.plotItem.clear
+        df = pd.read_csv("C:\MyData\GitRepos\CS261F21PID45\Files\Files\ScrapedData\ScrapData.csv")
+        row1 = list(df)
+        ### getting list from data frame 
+        ##
+        #
+        for i in range(len(row1)):
+            if col1 == row1[i]:
+                col1_list = df.iloc[:,i].tolist()
+            if col2 == row1[i]:
+                col2_list = df.iloc[:,i].tolist()
+        ###
+        ##cleaning the first array
+        ###
+        if col1 == "Likes" or col1 == "Dislikes":
+            self.cleanLikes(col1_list)
+        elif col1 == "Subscribers":
+            self.cleansubs(col1_list)
+        elif col1 == "Comments":
+            self.cleanComments(col1_list)
+        elif col1 == "Views":
+            self.cleanViews(col1_list)
+        ###
+        ##cleaning the second array
+        ###
+        if col2 == "Likes" or col2 == "Dislikes":
+            self.cleanLikes(col2_list)
+        elif col2 == "Subscribers":
+            self.cleansubs(col2_list)
+        elif col2 == "Comments":
+            self.cleanComments(col2_list)
+        elif col2 == "Views":
+            self.cleanViews(col2_list)
+        ###
+        ## plotting the appropriate graph
+        ###
+        if graphtype == "Line graph":
+            self.plotline(col1_list,col2_list)
+        elif graphtype == "Scatter Plot":
+            self.plotscatter(col1_list,col2_list)
+    
+    def cleanViews(self,arr):
+        count = 0
+        for word in arr:
+            num = word.split()
+            number = num[0].replace(",","")
+            if number.isdigit():
+                arr[count]= int(number)
+            else:
+                arr[count] = 0
+            count+=1
+    def cleanLikes(self,arr):
+        count = 0
+        stringcount = 0
+        for word in arr:
+            found = False
+            while stringcount<len(word) and found == False:
+                if word[stringcount]=='K':
+                    num = word.replace(",","")
+
+                    num = num.replace("K","")
+
+                    num = int(float(num)*1000)
+
+                    arr[count] = num
+                    found = True
+                stringcount+=1   
+
+            if word.isdigit() == False and found == False:
+                arr[count] = 0
+            elif word.isdigit() and found == False:
+                arr[count] = int(word)
+            count+=1
+    def cleansubs(self,arr):
+        count = 0
+        for word in arr:
+            word = str(word)
+            word.replace("nan","0")
+            if word.find("K")!=-1:
+                num = word.replace("K subscribers","")
+                arr[count] = int(float(num)*1000)
+            elif word.find("M")!= -1:
+                num = word.replace("M subscribers","")
+                arr[count] = int(float(num)*1000000)
+            elif word.find("subscribers")!=-1:
+                num = word.replace(" subscribers","")
+                arr[count] = int(num)
+            else:
+                arr[count]=0
+            count+=1
+    def cleanComments(self,arr):
+        count=0
+        for word in arr:
+            num = word.replace(",","")
+            num = num.replace(" Comments","")
+            num = num.replace(" Comment","")
+            arr[count] = int(num)
+            count+=1
+    def plotline(self,y_arr,x_arr):
+        self.graphwidget.plotItem.clear
+        self.graphwidget.plotItem.plot(y_arr,x_arr)
+    def plotscatter(self,y_arr,x_arr):
+        self.graphwidget.plotItem.clear
+        x = np.array(x_arr)
+        y = np.array(y_arr)
+        self.graphwidget.plotItem.plot(x,y,pen=None, symbol = 'x')
+        
+
 from pyqtgraph import PlotWidget
 
 
