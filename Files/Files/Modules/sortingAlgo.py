@@ -304,8 +304,23 @@ def Buble_sort(Array,sorttype):
 #
 #Counting Sort
 def counting_sort(passed_array,sorttype):
-    min_vallue=min(passed_array)
+    
+    orignal_Array=[]
+    sorted_index_list=[]
+    
+    for x in range(0,len(passed_array)):
+        orignal_Array.append(passed_array[x])
+        sorted_index_list.append(passed_array[x])
 
+    for x in range(0,len(passed_array)):
+        passed_array[x]=passed_array[x].lower()
+        Temp=passed_array[x]
+        if not(Temp.isdecimal()):
+            Temp=Temp.lower()
+        passed_array[x]=ord(Temp[0])
+
+
+    min_vallue=min(passed_array)
     if(min_vallue<0):
         for x in range(0,len(passed_array)):
             passed_array[x]=passed_array[x]-(min_vallue)
@@ -321,12 +336,23 @@ def counting_sort(passed_array,sorttype):
 
     for x in range(0,len(counting_array)-1):
         counting_array[x+1]=counting_array[x+1]+counting_array[x]
-        
+    
+    count=len(passed_array)-1
+
     for x in range(len(passed_array)-1,-1,-1):
         index=passed_array[x]
         sorted_index=counting_array[index]
         counting_array[index]=counting_array[index]-1
         resultant_array[sorted_index-1]=index
+        sorted_index_list[count]=sorted_index-1
+        count=count-1
+
+    
+    for x in range(0,len(sorted_index_list)):
+        index=sorted_index_list[x]
+        resultant_array[index]=orignal_Array[x]
+
+
     if(min_vallue<0):
         for x in range(0,len(resultant_array)):
             resultant_array[x]=resultant_array[x]+(min_vallue)
@@ -335,6 +361,9 @@ def counting_sort(passed_array,sorttype):
         resultant_array.reverse()
 
     return resultant_array
+
+Array=["Apple","Ball","calender","1","musawir","ahmed","zellery","pointer"]
+print(counting_sort(Array,"Ascending"))
 
 
 #####
@@ -371,6 +400,9 @@ def shellsort(Array,sorttype):
     return Array
 
 
+
+
+
 #####
 #
 #Comb Sort
@@ -392,6 +424,8 @@ def Combsort(Array,sorttype):
         gap=int(gap/1.3)
 
     return Array
+
+
 
 
 ######
@@ -425,3 +459,6 @@ def cyclesort(Array,sorttype):
                     current_index=current_index+1
                 Array[current_index],value=value,Array[current_index]
     return Array
+
+
+
