@@ -18,6 +18,7 @@ import sys
 sys.path.insert(1, 'Files\Files')
 
 from Modules import MainscreenFunctions
+from Modules import sortingAlgo
 
 class Ui_MainWindow(object):
     #Funtion To Open SearchFilter Screen
@@ -76,7 +77,8 @@ class Ui_MainWindow(object):
         self.SelectAlgorithmcomboBox.addItem("")
         self.SelectAlgorithmcomboBox.addItem("")
         self.SelectAlgorithmcomboBox.addItem("")
-        
+        self.SelectAlgorithmcomboBox.addItem("")
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(1120, 10, 75, 31))
         ####Scrap Button
@@ -384,10 +386,19 @@ class Ui_MainWindow(object):
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
+        ####Video Name
+        ##
+        #
         self.VideoNam_sortAsecending.setFont(font)
         self.VideoNam_sortAsecending.setObjectName("VideoNam_sortAsecending")
+        self.VideoNam_sortAsecending.clicked.connect(lambda: MainscreenFunctions.Video_name("Ascending",self.MainTable,self.SelectAlgorithmcomboBox))
+
         self.VideoNam_sortdescending = QtWidgets.QToolButton(self.centralwidget)
         self.VideoNam_sortdescending.setGeometry(QtCore.QRect(116, 160, 25, 23))
+        self.VideoNam_sortdescending.clicked.connect(lambda: MainscreenFunctions.Video_name("desending",self.MainTable,self.SelectAlgorithmcomboBox))
+        #
+        ##
+        ###
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -546,6 +557,8 @@ class Ui_MainWindow(object):
         self.SelectAlgorithmcomboBox.setItemText(9, _translate("MainWindow", "Pigeonhole Sort"))
         self.SelectAlgorithmcomboBox.setItemText(10, _translate("MainWindow", "Cycle Sort"))
         self.SelectAlgorithmcomboBox.setItemText(11, _translate("MainWindow", "Cocktail Sort"))
+        self.SelectAlgorithmcomboBox.setItemText(12, _translate("MainWindow", "Selection Sort"))
+
 
         # self.DataLoadcomboBox.setItemText(0, _translate("MainWindow", "Select File.."))
         # self.DataLoadcomboBox.setItemText(1, _translate("MainWindow", "ScrapData.csv"))

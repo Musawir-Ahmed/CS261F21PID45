@@ -2,6 +2,7 @@ from os import link, path
 from Modules import scraping
 from Modules import DataClass
 from Modules import extraFunctions
+from Modules import sortingAlgo
 from selenium import webdriver 
 from PyQt5.QtWidgets import QTableWidgetItem,QLabel
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -17,6 +18,7 @@ Data_list_object=DataClass.DataList()
 #Declaring Data Object Globally
 Data_Attribute_object=None
 ##Declares When The Programs Starts
+Table=None
 
 def LoadData_Table(MainTable,data):
     rowCount=MainTable.rowCount()
@@ -117,20 +119,25 @@ def ScrapTitle(SearchTitle_Url,MainTable,ammount,AmmounRefrence):
     extraFunctions.append_data(data,'Files/Files/ScrapedData/UserData-'+str(number)+'.csv')
 
 def Load_Data(File,MainTable):
+
+    global Table
+
+    Table=MainTable
+    
     if(File!="Select File.."):
-        Path="Files\Files\ScrapedData\DataBackup\\"+File
+        Path="Files\Files\ScrapedData\\"+File
         global Data_list_object,Data_Attribute_object
         data = pd.read_csv(Path) 
         Data_list_object.Links=data['Link'].tolist()
         Data_list_object.VideoNames=data['Video Name'].tolist()
         Data_list_object.ChannelName=data['ChannelName'].tolist()
-        Data_list_object.No_of_Subscribers=data['No. of Subscribers'].tolist()
-        Data_list_object.No_of_Views=data['No. of Views'].tolist()
+        Data_list_object.No_of_Subscribers=data['Subscribers'].tolist()
+        Data_list_object.No_of_Views=data['Views'].tolist()
         Data_list_object.Date=data['Date'].tolist()
         Data_list_object.Duration=data['Duration'].tolist()
         Data_list_object.Likes=data['Likes'].tolist()
         Data_list_object.Dislikes=data['Dislikes'].tolist()
-        Data_list_object.No_Of_Comments=data['No. Of Comments'].tolist()
+        Data_list_object.No_Of_Comments=data['Comments'].tolist()
 
         #Creating Datat Attributes Object
 
@@ -147,7 +154,7 @@ def Load_Data(File,MainTable):
             Data_Attribute_object.No_of_Subscribers=Data_list_object.No_of_Subscribers[x]
             Data_Attribute_object.ChannelName=Data_list_object.ChannelName[x]
             Data_Attribute_object.Date=Data_list_object.Date[x]
-            Data_Attribute_object.Duration==Data_list_object.Duration[x]
+            Data_Attribute_object.Duration=Data_list_object.Duration[x]
             #Storing Object in List ALL
             Data_list_object.All.append(Data_Attribute_object)
             #
@@ -171,3 +178,32 @@ def OpenLink(maintable):
             link="https://www.youtube.com/"+link
         webbrowser.open(link)
         print(link)
+
+def Video_name(sorttype,Maintable,comboBox):
+    _list=None
+    Algorithm=comboBox.currentText()
+    if(Algorithm=="Selection Sort"):
+        _list=sortingAlgo.selection_sort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Bubble Sort"):
+        _list=sortingAlgo.Buble_sort(Data_list_object.All,sorttype,"VideoNames")
+    UpdateData_Table(Maintable,_list)
+
+
+def LoadData_Table_Object(MainTable,data,rowCount):
+    MainTable.setItem(rowCount,0,QTableWidgetItem(str(data.VideoNames)))
+    MainTable.setItem(rowCount,1,QTableWidgetItem(str(data.No_of_Views)))
+    MainTable.setItem(rowCount,2,QTableWidgetItem(str(data.Likes)))
+    MainTable.setItem(rowCount,3,QTableWidgetItem(str(data.Dislikes)))
+    MainTable.setItem(rowCount,4,QTableWidgetItem(str(data.No_Of_Comments)))
+    MainTable.setItem(rowCount,5,QTableWidgetItem(str(data.No_of_Subscribers)))
+    MainTable.setItem(rowCount,6,QTableWidgetItem(str(data.ChannelName)))
+    MainTable.setItem(rowCount,7,QTableWidgetItem(str(data.Date)))
+    MainTable.setItem(rowCount,8,QTableWidgetItem(str(data.Duration)))
+
+
+def UpdateData_Table(MainTable,Array):
+    rowCount=0
+    for x in range(0,len(Array)):
+        print(Array[x].Duration)
+        LoadData_Table_Object(Table,Array[x],x)
+

@@ -1,4 +1,5 @@
 import math
+
 ###Insertion Sort
 ##
 #
@@ -265,16 +266,18 @@ def cocktail_Sort(A,SortType):
 #####
 #         
 #Selection sort
-def selection_sort(Array,sorttype):
+def selection_sort(Array,sorttype,attribute):
 
     expression=None
     
     if(sorttype=="Ascending"):
-        expression="Array[index]>Array[y]"
+        expression="str(getattr(Array[index],attribute))>str(getattr(Array[y],attribute))"
     else:
-        expression="Array[index]<Array[y]"
+        expression="str(getattr(Array[index],attribute))<str(getattr(Array[y],attribute))"
 
     for x in range(0,len(Array)):
+        if(x==10):
+            break
         index=x
         for y in range(x+1,len(Array)):
             if(eval(expression)):
@@ -288,13 +291,13 @@ def selection_sort(Array,sorttype):
 #####
 #
 #buuble sort algorithm
-def Buble_sort(Array,sorttype):
+def Buble_sort(Array,sorttype,attribute):
     expression=None
-    
+    print("Bubble")
     if(sorttype=="Ascending"):
-        expression="Array[y]<Array[x]"
+        expression="str(getattr(Array[y],attribute))<str(getattr(Array[x],attribute))"
     else:
-        expression="Array[y]>Array[x]"
+        expression="str(getattr(Array[y],attribute))>str(getattr(Array[x],attribute))"
 
     for x in range(0,len(Array)):
         for y in range(x+1,len(Array)):
@@ -367,8 +370,31 @@ def counting_sort(passed_array,sorttype):
 
     return resultant_array
 
-Array=["Apple","Ball","calender","1","musawir","ahmed","zellery","pointer"]
-print(counting_sort(Array,"Ascending"))
+
+
+# def test(sorttype,Array):
+#     expression=None
+    
+#     if(sorttype=="Ascending"):
+#         expression="str(Array[index])>str(Array[y])"
+#     else:
+#         expression="str(Array[index])<str(Array[y])"
+
+#     for x in range(0,len(Array)):
+#         if(x==10):
+#             break
+#         index=x
+#         for y in range(x+1,len(Array)):
+#             if(eval(expression)):
+#                 index=y 
+#         temp=Array[index]
+#         Array[index]=Array[x]
+#         Array[x]=temp
+#     print(Array)
+#     return Array   
+
+# Array=["Apple","Ball","A Spent $1,000 To Become This","1","musawir","F FILLED MY ISLAND HOUSE WITH PACKING PEANUTS!","zellery","pointer"]
+# print(test("Ascending",Array))
 
 
 #####
