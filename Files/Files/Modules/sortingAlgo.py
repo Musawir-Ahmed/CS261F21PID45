@@ -12,6 +12,7 @@ def insertion_Sort(A,SortType):
         A[j+1] = key
     if SortType == "Ascending":
         return A
+    
     return list(reversed(A))
 
 
@@ -39,20 +40,28 @@ def Merge(A,p,q,r):
         L.append(A[p+i])
     for j in range(n2):
         R.append(A[q+1+j])
-    L.append(math.inf)
-    R.append(math.inf)
     
     i = 0 
     j = 0
-
-    for k in range(p,r+1):
+    k = p
+    while i<n1 and j<n2:
         if L[i]<=R[j]:
             A[k] = L[i]
             i+=1
         else:
             A[k] = R[j]
             j+=1
-
+        k+=1
+    if i==len(L):
+        while j < n2:
+            A[k] = R[j]
+            j+=1
+            k+=1
+    else:
+        while i < len(L):
+            A[k] = L[i]
+            i+=1
+            k+=1
 ###Quick Sort
 ##
 #
@@ -110,30 +119,18 @@ def strand_Sort(inArr,SortType):
         newarr.append(inArr[0])
         prev_element = newarr[0]
         inArr.pop(0)
-        if SortType == "Ascending":
-            while main_count!=len(inArr):
-                if inArr[main_count]>prev_element:
-                    prev_element = inArr[main_count]
-                    newarr.append(prev_element)
-                    inArr.pop(main_count)
-                    main_count-=1
-                main_count+=1
-        else:
-            while main_count!=len(inArr):
-                print(inArr[main_count],prev_element,"\t",len(inArr),main_count)
-                print(newarr,outputarr,inArr)
-                print("")
-                if inArr[main_count]<prev_element:
-                    prev_element = inArr[main_count]
-                    newarr.append(prev_element)
-                    inArr.pop(main_count)
-                    main_count-=1
-                main_count+=1
-                
+        while main_count!=len(inArr):
+            if inArr[main_count]>prev_element:
+                prev_element = inArr[main_count]
+                newarr.append(prev_element)
+                inArr.pop(main_count)
+                main_count-=1
+            main_count+=1
         outputarr = merge_strand(newarr,outputarr,SortType)
         
-    return outputarr
-
+    if SortType == "Ascending":
+        return outputarr
+    return list(reversed(outputarr))
 
 ###Radix Sort
 ##
@@ -200,58 +197,66 @@ def redix_sort(passed_array,SortType):
 ##
 #
 def pigeonhole_Sort(A,SortType):
-    maxelement = max(A)
-    minelement = min(A)
-    arr_range = maxelement-minelement+1
-    pigeonhole = []
-    for k in range(arr_range):
-        pigeonhole.append([]*arr_range)
-        
-    for i in range(len(A)):
-        piglist = pigeonhole[A[i]-minelement]
-        piglist.append(A[i])
-        pigeonhole[A[i]-minelement] = piglist
-        
-    arraycount = 0 
-    print(pigeonhole)
-    for j in range(len(pigeonhole)):
-        for c in range(len(pigeonhole[j])):
-            piglist = pigeonhole[j]
-            if piglist:
-                A[arraycount] = piglist[c]
-                arraycount+=1
+    if str(A[0]).isdigit():
+        maxelement = max(A)
+        minelement = min(A)
+        arr_range = maxelement-minelement+1
+        pigeonhole = []
+        for k in range(arr_range):
+            pigeonhole.append([]*arr_range)
+
+        for i in range(len(A)):
             
-    if SortType == "Ascending":
-        return A
-    return list(reversed(A))
+            piglist = pigeonhole[A[i]-minelement]
+            piglist.append(A[i])
+            pigeonhole[A[i]-minelement] = piglist
+
+        arraycount = 0 
+        for j in range(len(pigeonhole)):
+            for c in range(len(pigeonhole[j])):
+                piglist = pigeonhole[j]
+                if piglist:
+                    A[arraycount] = piglist[c]
+                    arraycount+=1
+    else:
+        maxelement = max(A)
+        minelement = min(A)
+        arr_range = ord(maxelement[0])-ord(minelement[0])+1
+        pigeonhole = []
+        for k in range(arr_range):
+            pigeonhole.append([]*arr_range)
+
+        for i in range(len(A)):
+            key = A[i]
+            piglist = pigeonhole[ord(key[0])-ord(minelement[0])]
+            piglist.append(A[i])
+            pigeonhole[ord(key[0])-ord(minelement[0])] = piglist
+
+        arraycount = 0 
+        for j in range(len(pigeonhole)):
+            for c in range(len(pigeonhole[j])):
+                piglist = pigeonhole[j]
+                if piglist:
+                    A[arraycount] = piglist[c]
+                    arraycount+=1
+    return A
 
 
 ###Cocktail Sort
 ##
 #
 def cocktail_Sort(A,SortType):
-    minidx = 0
-    maxidx = len(A)-1
-    for k in range(len(A)):
-        ###
-        if k%2==0:
-            maxval = -math.inf
-            for i in range(minidx,maxidx+1):
-                if A[i]>maxval:
-                    maxval = A[i]
-                    maxval_idx = i
-
-            A[maxval_idx],A[maxidx] = A[maxidx],maxval
-            maxidx -= 1
-            ###
-        else:
-            minval = math.inf
-            for i in range(maxidx,minidx-1,-1):
-                if A[i]<minval:
-                    minval = A[i]
-                    minval_idx = i
-            A[minval_idx],A[minidx] = A[minidx],minval
-            minval += 1
+    low = 0
+    high = len(A)-1
+    while low<high:
+        for k in range(low,high):
+            if A[k]>A[k+1]:
+                A[k],A[k+1] = A[k+1],A[k]
+        for i in range(high,low,-1):
+            if A[i]<A[i-1]:
+                A[i],A[i-1] = A[i-1],A[i]
+        low+=1
+        high-=1 
     if SortType == "Ascending":
         return A
     return list(reversed(A))

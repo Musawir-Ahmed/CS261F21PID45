@@ -252,7 +252,7 @@ class Ui_GraphScreen(object):
 
     def PlotGraph(self,graphtype,col1,col2):
         self.graphwidget.plotItem.clear
-        df = pd.read_csv("Files\Files\ScrapedData\ScrapData.csv")
+        df = pd.read_csv("C:\MyData\GitRepos\CS261F21PID45\Files\Files\ScrapedData\ScrapData.csv")
         row1 = list(df)
         ### getting list from data frame 
         ##
@@ -295,7 +295,9 @@ class Ui_GraphScreen(object):
     def cleanViews(self,arr):
         count = 0
         for word in arr:
-            num = word.split()
+            word = str(word)
+            num = word.replace("nan","0")
+            num = num.split()
             number = num[0].replace(",","")
             if number.isdigit():
                 arr[count]= int(number)
@@ -307,18 +309,20 @@ class Ui_GraphScreen(object):
         stringcount = 0
         for word in arr:
             found = False
-            while stringcount<len(word) and found == False:
-                if word[stringcount]=='K':
-                    num = word.replace(",","")
+            print(word)
+            word = str(word)
+            if word != "nan":
+                while stringcount<len(word) and found == False:
+                    if word[stringcount]=='K':
+                        num = word.replace(",","")
 
-                    num = num.replace("K","")
+                        num = num.replace("K","")
 
-                    num = int(float(num)*1000)
+                        num = int(float(num)*1000)
 
-                    arr[count] = num
-                    found = True
-                stringcount+=1   
-
+                        arr[count] = num
+                        found = True
+                    stringcount+=1
             if word.isdigit() == False and found == False:
                 arr[count] = 0
             elif word.isdigit() and found == False:
@@ -344,9 +348,15 @@ class Ui_GraphScreen(object):
     def cleanComments(self,arr):
         count=0
         for word in arr:
-            num = word.replace(",","")
+            print(word)
+            word = str(word)
+            num = word.replace("nan","0")
+            num = num.replace(",","")
             num = num.replace(" Comments","")
             num = num.replace(" Comment","")
+            num = num.replace("Comments","")
+            if num == "":
+                num = "0"
             arr[count] = int(num)
             count+=1
     def plotline(self,y_arr,x_arr):
