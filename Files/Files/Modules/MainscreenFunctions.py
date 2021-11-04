@@ -6,12 +6,11 @@ from Modules import sortingAlgo
 from selenium import webdriver 
 from PyQt5.QtWidgets import QTableWidgetItem,QLabel
 from PyQt5 import QtCore, QtGui, QtWidgets
-import time
 import pandas as pd 
 import webbrowser
 import random
-import re
-
+import copy
+import threading
 #Declaring Data list Object Globally
 Data_list_object=None
 Data_list_object=DataClass.DataList()
@@ -94,7 +93,6 @@ def ScrapTitle(SearchTitle_Url,MainTable,ammount,AmmounRefrence):
         for x in range(0,int(ammount)):
             if(len(link_List[x])<24):
                 link_List[x]="https://www.youtube.com/"+link_List[x]
-            print("Link",link_List[x])
             temp=scraping.getAtrrib(link_List[x],driver)
             data.append(temp)
     
@@ -151,7 +149,6 @@ def OpenLink(maintable):
         if(len(link)<24):
             link="https://www.youtube.com/"+link
         webbrowser.open(link)
-        print(link)
 
 def Video_name(sorttype,Maintable,comboBox):
     _list=None
@@ -162,6 +159,28 @@ def Video_name(sorttype,Maintable,comboBox):
         _list=sortingAlgo.Buble_sort(Data_list_object.All,sorttype,"VideoNames")
     elif(Algorithm=="Counting Sort"):
         _list=sortingAlgo.counting_sort(Data_list_object.All,sorttype,"VideoNames",str)
+    elif(Algorithm=="Shell Sort"):
+        _list=sortingAlgo.shellsort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Comb Sort"):
+        _list=sortingAlgo.Combsort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Cycle Sort"):
+        _list=sortingAlgo.cyclesort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Insertion Sort"):
+        _list=sortingAlgo.insertion_Sort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Merge Sort"):
+        random.shuffle(Data_list_object.All)
+        _list=sortingAlgo.MergeSort_Controller(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,"VideoNames")
+    elif(Algorithm=="Quick Sort"):
+        random.shuffle(Data_list_object.All)
+        _list=sortingAlgo.quick_sort_controller(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,"VideoNames")
+    elif(Algorithm=="Strand Sort"):
+        temp=copy.deepcopy(Data_list_object.All)
+        _list=sortingAlgo.strand_Sort(temp,sorttype,"VideoNames")
+    elif(Algorithm=="Pigeonhole Sort"):
+        _list=sortingAlgo.pigeonhole_Sort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Cocktail Sort"):
+        _list=sortingAlgo.cocktail_Sort(Data_list_object.All,sorttype,"VideoNames")
+    
     UpdateData_Table(Maintable,_list)
 
 

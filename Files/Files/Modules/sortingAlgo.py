@@ -3,11 +3,11 @@ import math
 ###Insertion Sort
 ##
 #
-def insertion_Sort(A,SortType):
+def insertion_Sort(A,SortType,attribute):
     for i in range(len(A)):
         key = A[i]
         j = i-1
-        while j>-1 and A[j]>=key:
+        while j>-1 and getattr(A[j],attribute)>=getattr(key,attribute):
             A[j+1]=A[j]
             j-=1
         A[j+1] = key
@@ -16,23 +16,21 @@ def insertion_Sort(A,SortType):
     
     return list(reversed(A))
 
-
 ###Merge Sort
 ##
 #
-def merge_Sort(A,left,right,SortType):
+def merge_Sort(A,left,right,SortType,attribute):
     if right > left:
         mid = (left + right)//2
         
-        merge_Sort(A,left,mid,SortType)
-        merge_Sort(A,mid+1,right,SortType)
+        merge_Sort(A,left,mid,SortType,attribute)
+        merge_Sort(A,mid+1,right,SortType,attribute)
         
-        Merge(A,left,mid,right)
-    if SortType=="Ascending":   
-        return A
-    return list(reversed(A))
+        Merge(A,left,mid,right,attribute)
+
+    return A
     
-def Merge(A,p,q,r):
+def Merge(A,p,q,r,attribute):
     n1 = q-p+1
     n2 = r-q
     L = []
@@ -46,7 +44,7 @@ def Merge(A,p,q,r):
     j = 0
     k = p
     while i<n1 and j<n2:
-        if L[i]<=R[j]:
+        if getattr(L[i],attribute)<=getattr(R[j],attribute):
             A[k] = L[i]
             i+=1
         else:
@@ -63,75 +61,82 @@ def Merge(A,p,q,r):
             A[k] = L[i]
             i+=1
             k+=1
+
+def MergeSort_Controller(A,left,right,SortType,attribute):
+    A=merge_Sort(A,left,right,SortType,attribute)
+    if SortType=="Ascending":   
+        return A
+    return list(reversed(A))
+
 ###Quick Sort
 ##
 #
-def quick_Sort(arr,low,high,SortType):
+def quick_Sort(arr,low,high,attribute):
     if low<high:
-        pivot = partition(arr,low,high)
-        quick_Sort(arr,low,pivot-1,SortType)
-        quick_Sort(arr,pivot+1,high,SortType)
-    if SortType == "Ascending":
-        return arr
-    return list(reversed(arr))
+        pivot = partition(arr,low,high,attribute)
+        quick_Sort(arr,low,pivot-1,attribute)
+        quick_Sort(arr,pivot+1,high,attribute)
+    return arr
 
-def partition(arr,low,high):
-    pivot = arr[high]
+def partition(arr,low,high,attribute):
+    pivot = getattr(arr[high],attribute)
     i = low - 1
     
     for j in range(low,high):
-        if  arr[j]<pivot:
+        if  getattr(arr[j],attribute)<pivot:
             i+=1
             arr[i],arr[j] = arr[j], arr[i] 
     arr[i+1],arr[high] = arr[high],arr[i+1]
     
     return i+1
+
+def quick_sort_controller(arr,low,high,SortType,attribute):
+    arr=quick_Sort(arr,low,high,attribute)
+    if SortType == "Ascending":
+        return arr
+    return list(reversed(arr))
+
 ###Strand Sort
 ##
 #
-def merge_strand(newarr,outarr,SortType):
+def merge_strand(newarr,outarr,SortType,attribute):
     returnarr = []
     while len(newarr)>0 and len(outarr)>0:
-        if SortType == "Ascending":
-            if newarr[0]>=outarr[0]:
-                returnarr.append(outarr[0])
-                outarr.pop(0)
-            else:
-                returnarr.append(newarr[0])
-                newarr.pop(0) 
+        if getattr(newarr[0],attribute)>=getattr(outarr[0],attribute):
+            returnarr.append(outarr[0])
+            outarr.pop(0)
         else:
-            if newarr[0]<=outarr[0]:
-                returnarr.append(outarr[0])
-                outarr.pop(0)
-            else:
-                returnarr.append(newarr[0])
-                newarr.pop(0) 
-        
+            returnarr.append(newarr[0])
+            newarr.pop(0)         
     returnarr += newarr
     returnarr += outarr
+
+
     return returnarr
 
 
-def strand_Sort(inArr,SortType):
+def strand_Sort(inArr,SortType,attribute):
     outputarr = []
+    print(len(inArr))
     while len(inArr)!=0:
         newarr = []
         main_count = 0
         newarr.append(inArr[0])
-        prev_element = newarr[0]
+        prev_element =newarr[0] 
         inArr.pop(0)
         while main_count!=len(inArr):
-            if inArr[main_count]>prev_element:
+            if getattr(inArr[main_count],attribute)>getattr(prev_element,attribute):
                 prev_element = inArr[main_count]
                 newarr.append(prev_element)
                 inArr.pop(main_count)
                 main_count-=1
             main_count+=1
-        outputarr = merge_strand(newarr,outputarr,SortType)
-        
-    if SortType == "Ascending":
+        outputarr = merge_strand(newarr,outputarr,SortType,attribute)
+    if(SortType=="Ascending"):
         return outputarr
     return list(reversed(outputarr))
+
+
 
 ###Radix Sort
 ##
@@ -197,7 +202,7 @@ def redix_sort(passed_array,SortType):
 ###Pigeonhole Sort
 ##
 #
-def pigeonhole_Sort(A,SortType):
+def pigeonhole_Sort(A,SortType,attribute):
     if str(A[0]).isdigit():
         maxelement = max(A)
         minelement = min(A)
@@ -220,15 +225,20 @@ def pigeonhole_Sort(A,SortType):
                     A[arraycount] = piglist[c]
                     arraycount+=1
     else:
-        maxelement = max(A)
-        minelement = min(A)
+        temp=[]
+        for x in range(0,len(A)):
+            object_attribute=getattr(A[x],attribute)
+            temp.append(object_attribute)
+        
+        maxelement = max(temp)
+        minelement = min(temp)
         arr_range = ord(maxelement[0])-ord(minelement[0])+1
         pigeonhole = []
         for k in range(arr_range):
             pigeonhole.append([]*arr_range)
 
         for i in range(len(A)):
-            key = A[i]
+            key = getattr(A[i],attribute)
             piglist = pigeonhole[ord(key[0])-ord(minelement[0])]
             piglist.append(A[i])
             pigeonhole[ord(key[0])-ord(minelement[0])] = piglist
@@ -240,21 +250,24 @@ def pigeonhole_Sort(A,SortType):
                 if piglist:
                     A[arraycount] = piglist[c]
                     arraycount+=1
-    return A
+    if(SortType=="Ascending"):
+        return A
+    
+    return list(reversed(A))
 
 
 ###Cocktail Sort
 ##
 #
-def cocktail_Sort(A,SortType):
+def cocktail_Sort(A,SortType,attribute):
     low = 0
     high = len(A)-1
     while low<high:
         for k in range(low,high):
-            if A[k]>A[k+1]:
+            if getattr(A[k],attribute)>getattr(A[k+1],attribute):
                 A[k],A[k+1] = A[k+1],A[k]
         for i in range(high,low,-1):
-            if A[i]<A[i-1]:
+            if getattr(A[i],attribute)<getattr(A[i-1],attribute):
                 A[i],A[i-1] = A[i-1],A[i]
         low+=1
         high-=1 
@@ -278,7 +291,6 @@ def selection_sort(Array,sorttype,attribute):
     for x in range(0,len(Array)):
         index=x
         for y in range(x+1,len(Array)):
-            print(getattr(Array[index],attribute),"\n",getattr(Array[y],attribute),"\n___________________________=======__________________________\n\n")
             if(eval(expression)):
                 index=y 
         temp=Array[index]
@@ -294,20 +306,18 @@ def Buble_sort(Array,sorttype,attribute):
     for x  in range(0,len(Array)):
         expression=None
     if(sorttype=="Ascending"):
-        expression="getattr(Array[y],attribute)<getattr(Array[x],attribute)"
-    else:
         expression="getattr(Array[y],attribute)>getattr(Array[x],attribute)"
+    else:
+        expression="getattr(Array[y],attribute)<getattr(Array[x],attribute)"
 
     for x in range(0,len(Array)):
         for y in range(0,len(Array)):
-            print(eval(expression))
             if(eval(expression)):
 
                 temp=Array[y]
                 Array[y]=Array[x]
                 Array[x]=temp
-    for x in range(0,len(Array)):
-        print(Array[x])
+
     return Array
 
 def check(value):
@@ -406,12 +416,12 @@ def shellsort(Array,sorttype,attribute):
 #####
 #
 #Comb Sort
-def Combsort(Array,sorttype):
+def Combsort(Array,sorttype,attribute):
     expression=None
     if(sorttype!="Ascending"):
-        expression="Array[index] < Array[gap+index]"
+        expression="getattr(Array[index],attribute)<getattr(Array[gap+index],attribute)"
     else:
-        expression="Array[index] > Array[gap+index]"
+        expression="getattr(Array[index],attribute)>getattr(Array[gap+index],attribute)"
 
 
     gap=int(len(Array))
@@ -430,12 +440,16 @@ def Combsort(Array,sorttype):
 ######
 ###
 #CycleSort
-def cyclesort(Array,sorttype):
+def cyclesort(Array,sorttype,attribute):
     expression=None
+    
+    constant_expression1="getattr(value,attribute)==getattr(Array[current_index],attribute)"
+    constant_expression2="getattr(value,attribute)==getattr(Array[current_index],attribute)"
+    
     if(sorttype=="Ascending"):
-        expression="Array[x]<value"
+        expression="getattr(Array[x],attribute)<getattr(value,attribute)"
     else:
-        expression="Array[x]>value"
+        expression="getattr(Array[x],attribute)>getattr(value,attribute)"
     for index in range(0,len(Array)):
         value=Array[index]
         current_index=index
@@ -444,7 +458,7 @@ def cyclesort(Array,sorttype):
                 current_index=current_index+1
         
         if(current_index!=index):
-            while value==Array[current_index]:
+            while eval(constant_expression1):
                 current_index=current_index+1
 
             Array[current_index],value=value,Array[current_index]
@@ -454,7 +468,7 @@ def cyclesort(Array,sorttype):
                 for x in range(index+1,len(Array)):
                     if(eval(expression)):
                         current_index= current_index+1
-                while value==Array[current_index]:
+                while eval(constant_expression2):
                     current_index=current_index+1
                 Array[current_index],value=value,Array[current_index]
     return Array

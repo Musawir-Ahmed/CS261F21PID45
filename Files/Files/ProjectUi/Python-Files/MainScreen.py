@@ -78,6 +78,7 @@ class Ui_MainWindow(object):
         self.SelectAlgorithmcomboBox.addItem("")
         self.SelectAlgorithmcomboBox.addItem("")
         self.SelectAlgorithmcomboBox.addItem("")
+        self.SelectAlgorithmcomboBox.addItem("")
 
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(1120, 10, 75, 31))
@@ -553,11 +554,12 @@ class Ui_MainWindow(object):
         self.SelectAlgorithmcomboBox.setItemText(5, _translate("MainWindow", "Strand Sort"))
         self.SelectAlgorithmcomboBox.setItemText(6, _translate("MainWindow", "Counting Sort"))
         self.SelectAlgorithmcomboBox.setItemText(7, _translate("MainWindow", "Radix Sort"))
-        self.SelectAlgorithmcomboBox.setItemText(8, _translate("MainWindow", "Combo Sort"))
+        self.SelectAlgorithmcomboBox.setItemText(8, _translate("MainWindow", "Comb Sort"))
         self.SelectAlgorithmcomboBox.setItemText(9, _translate("MainWindow", "Pigeonhole Sort"))
         self.SelectAlgorithmcomboBox.setItemText(10, _translate("MainWindow", "Cycle Sort"))
         self.SelectAlgorithmcomboBox.setItemText(11, _translate("MainWindow", "Cocktail Sort"))
         self.SelectAlgorithmcomboBox.setItemText(12, _translate("MainWindow", "Selection Sort"))
+        self.SelectAlgorithmcomboBox.setItemText(13, _translate("MainWindow", "Insertion Sort"))
 
 
         # self.DataLoadcomboBox.setItemText(0, _translate("MainWindow", "Select File.."))
