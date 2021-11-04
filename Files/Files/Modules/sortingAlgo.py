@@ -271,15 +271,14 @@ def selection_sort(Array,sorttype,attribute):
     expression=None
     
     if(sorttype=="Ascending"):
-        expression="str(getattr(Array[index],attribute))>str(getattr(Array[y],attribute))"
+        expression="getattr(Array[index],attribute)>getattr(Array[y],attribute)"
     else:
-        expression="str(getattr(Array[index],attribute))<str(getattr(Array[y],attribute))"
+        expression="getattr(Array[index],attribute)<getattr(Array[y],attribute)"
 
     for x in range(0,len(Array)):
-        if(x==10):
-            break
         index=x
         for y in range(x+1,len(Array)):
+            print(getattr(Array[index],attribute),"\n",getattr(Array[y],attribute),"\n___________________________=======__________________________\n\n")
             if(eval(expression)):
                 index=y 
         temp=Array[index]
@@ -292,53 +291,56 @@ def selection_sort(Array,sorttype,attribute):
 #
 #buuble sort algorithm
 def Buble_sort(Array,sorttype,attribute):
-    expression=None
-    print("Bubble")
+    for x  in range(0,len(Array)):
+        expression=None
     if(sorttype=="Ascending"):
-        expression="str(getattr(Array[y],attribute))<str(getattr(Array[x],attribute))"
+        expression="getattr(Array[y],attribute)<getattr(Array[x],attribute)"
     else:
-        expression="str(getattr(Array[y],attribute))>str(getattr(Array[x],attribute))"
+        expression="getattr(Array[y],attribute)>getattr(Array[x],attribute)"
 
     for x in range(0,len(Array)):
-        for y in range(x+1,len(Array)):
+        for y in range(0,len(Array)):
+            print(eval(expression))
             if(eval(expression)):
+
                 temp=Array[y]
                 Array[y]=Array[x]
                 Array[x]=temp
+    for x in range(0,len(Array)):
+        print(Array[x])
     return Array
 
+def check(value):
+    try:
+        return int(value)
+    except ValueError:
+         return value
 
 #####
 #
 #Counting Sort
-def counting_sort(passed_array,sorttype):
-    
+def counting_sort(passed_array,sorttype,attribute,sortingOf):
     orignal_Array=[]
     sorted_index_list=[]
-    
+    temp=[]
     for x in range(0,len(passed_array)):
         orignal_Array.append(passed_array[x])
-        sorted_index_list.append(passed_array[x])
+        sorted_index_list.append(0)
+        temp.append(0)
 
     for x in range(0,len(passed_array)):
-        passed_array[x]=passed_array[x].lower()
-        Temp=passed_array[x]
-        if not(Temp.isdecimal()):
-            Temp=Temp.lower()
-        passed_array[x]=ord(Temp[0])
+        object_attribute=getattr(passed_array[x],attribute)
+        temp[x]=object_attribute
+        if(sortingOf==str):
+            Temp=temp[x]
+            temp[x]=ord(Temp[0])
 
-
-    min_vallue=min(passed_array)
-    if(min_vallue<0):
-        for x in range(0,len(passed_array)):
-            passed_array[x]=passed_array[x]-(min_vallue)
-    
-    max_value=max(passed_array)+1
+    max_value=max(temp)+1
     counting_array=[0]*max_value
-    resultant_array=[0]*len(passed_array)
+    resultant_array=[0]*len(temp)
 
-    for x in range(0,len(passed_array)):
-        index=passed_array[x]
+    for x in range(0,len(temp)):
+        index=temp[x]
         counting_array[index]=counting_array[index]+1
 
 
@@ -348,7 +350,7 @@ def counting_sort(passed_array,sorttype):
     count=len(passed_array)-1
 
     for x in range(len(passed_array)-1,-1,-1):
-        index=passed_array[x]
+        index=temp[x]
         sorted_index=counting_array[index]
         counting_array[index]=counting_array[index]-1
         resultant_array[sorted_index-1]=index
@@ -360,55 +362,25 @@ def counting_sort(passed_array,sorttype):
         index=sorted_index_list[x]
         resultant_array[index]=orignal_Array[x]
 
-
-    if(min_vallue<0):
-        for x in range(0,len(resultant_array)):
-            resultant_array[x]=resultant_array[x]+(min_vallue)
-    
     if(sorttype!="Ascending"):
         resultant_array.reverse()
 
+
     return resultant_array
-
-
-
-# def test(sorttype,Array):
-#     expression=None
-    
-#     if(sorttype=="Ascending"):
-#         expression="str(Array[index])>str(Array[y])"
-#     else:
-#         expression="str(Array[index])<str(Array[y])"
-
-#     for x in range(0,len(Array)):
-#         if(x==10):
-#             break
-#         index=x
-#         for y in range(x+1,len(Array)):
-#             if(eval(expression)):
-#                 index=y 
-#         temp=Array[index]
-#         Array[index]=Array[x]
-#         Array[x]=temp
-#     print(Array)
-#     return Array   
-
-# Array=["Apple","Ball","A Spent $1,000 To Become This","1","musawir","F FILLED MY ISLAND HOUSE WITH PACKING PEANUTS!","zellery","pointer"]
-# print(test("Ascending",Array))
 
 
 #####
 ##
 #Shell Sort
-def shellsort(Array,sorttype):
+def shellsort(Array,sorttype,attribute):
     expression1=None
     expression2=None
     if(sorttype=="Ascending"):
-        expression1="Array[index+gap]<Array[index]"
-        expression2="Array[prevous_indexes - gap] > Array[prevous_indexes]"
+        expression1="getattr(Array[index+gap],attribute)<getattr(Array[index],attribute)"
+        expression2="getattr(Array[prevous_indexes - gap],attribute) > getattr(Array[prevous_indexes],attribute)"
     else:
-        expression1="Array[index+gap]>Array[index]"
-        expression2="Array[prevous_indexes - gap] < Array[prevous_indexes]"
+        expression1="getattr(Array[index+gap],attribute)>getattr(Array[index],attribute)"
+        expression2="getattr(Array[prevous_indexes - gap],attribute) < getattr(Array[prevous_indexes],attribute)"
 
     gap=int(len(Array)/2)
     while gap>0:
@@ -429,9 +401,6 @@ def shellsort(Array,sorttype):
         gap=int(gap/2)
 
     return Array
-
-
-
 
 
 #####
@@ -455,7 +424,6 @@ def Combsort(Array,sorttype):
         gap=int(gap/1.3)
 
     return Array
-
 
 
 
@@ -490,6 +458,3 @@ def cyclesort(Array,sorttype):
                     current_index=current_index+1
                 Array[current_index],value=value,Array[current_index]
     return Array
-
-
-

@@ -10,6 +10,7 @@ import time
 import pandas as pd 
 import webbrowser
 import random
+import re
 
 #Declaring Data list Object Globally
 Data_list_object=None
@@ -19,20 +20,6 @@ Data_list_object=DataClass.DataList()
 Data_Attribute_object=None
 ##Declares When The Programs Starts
 Table=None
-
-def LoadData_Table(MainTable,data):
-    rowCount=MainTable.rowCount()
-    rowCount=rowCount-100
-    MainTable.setItem(rowCount,0,QTableWidgetItem(data[1]))
-    MainTable.setItem(rowCount,1,QTableWidgetItem(data[4]))
-    MainTable.setItem(rowCount,2,QTableWidgetItem(data[7]))
-    MainTable.setItem(rowCount,3,QTableWidgetItem(data[8]))
-    MainTable.setItem(rowCount,4,QTableWidgetItem(data[9]))
-    MainTable.setItem(rowCount,5,QTableWidgetItem(data[3]))
-    MainTable.setItem(rowCount,6,QTableWidgetItem(data[2]))
-    MainTable.setItem(rowCount,7,QTableWidgetItem(data[5]))
-    MainTable.setItem(rowCount,8,QTableWidgetItem(data[6]))
-    MainTable.insertRow(rowCount+1)
 
 def AppendData_To_List(data):
     Data_list_object.Links.append(data[0])
@@ -57,8 +44,9 @@ def CreatDataObject(Link,videoName,Views,Likes,Dislikes,Comments,Suscribers,Chan
     Data_Attribute_object.No_of_Subscribers=Suscribers
     Data_Attribute_object.ChannelName=ChannelNames
     Data_Attribute_object.Date=Date
-    Data_Attribute_object.Duration==Duration
+    Data_Attribute_object.Duration=Duration
     Data_list_object.All.append(Data_Attribute_object)
+    return Data_Attribute_object
 
 def Scrap_Link(SearchTitle_Url,MainTable):
     options = webdriver.ChromeOptions()
@@ -68,9 +56,12 @@ def Scrap_Link(SearchTitle_Url,MainTable):
     SearchTitle_Url.setText("")
     driver.switch_to.window(driver.window_handles[0])
     data=scraping.getAtrrib(text,driver)
-    LoadData_Table(MainTable,data)
     AppendData_To_List(data)
-    CreatDataObject(data[0],data[1],data[4],data[7],data[8],data[9],data[3],data[2],data[5],data[6])
+    rowCount=MainTable.rowCount()
+    rowCount=rowCount-100
+    data_object=CreatDataObject(data[0],data[1],data[4],data[7],data[8],data[9],data[3],data[2],data[5],data[6])
+    LoadData_Table_Object(MainTable,data_object,rowCount)
+    MainTable.insertRow(rowCount+1)
     driver.quit()    
 
 def scrapButton_pressed(SearchTitle_Url,MainTable,ammount):
@@ -94,7 +85,6 @@ def ScrapTitle(SearchTitle_Url,MainTable,ammount,AmmounRefrence):
     driver = webdriver.Chrome(executable_path='Files/Files/chromedriver_win32/chromedriver.exe', options=options)
     driver.switch_to.window(driver.window_handles[0])
     link_List=scraping.getLinks(driver,SearchTitle_Url.text())
-    print(ammount,len(link_List))
     if(int(ammount)>len(link_List)):
         ammount=len(link_List)
         AmmounRefrence.setText("Max Links ="+str(len(link_List)))
@@ -109,15 +99,20 @@ def ScrapTitle(SearchTitle_Url,MainTable,ammount,AmmounRefrence):
             data.append(temp)
     
     driver.quit()   
-
+    
+    rowCount=MainTable.rowCount()
+    rowCount=rowCount-100
     for x in range(0,len(data)):
-        LoadData_Table(MainTable,data[x])
+        MainTable.insertRow(rowCount+1)
+        data_object=CreatDataObject(data[x][0],data[x][1],data[x][4],data[x][7],data[x][8],data[x][9],data[x][3],data[x][2],data[x][5],data[x][6])
+        LoadData_Table_Object(MainTable,data_object,rowCount)
         AppendData_To_List(data[x])
-        CreatDataObject(data[x][0],data[x][1],data[x][4],data[x][7],data[x][8],data[x][9],data[x][3],data[x][2],data[x][5],data[x][6])
+        rowCount=rowCount+1
+
     
     number=random.randint(0,10000000000000)
     extraFunctions.append_data(data,'Files/Files/ScrapedData/UserData-'+str(number)+'.csv')
-
+    
 def Load_Data(File,MainTable):
 
     global Table
@@ -142,38 +137,17 @@ def Load_Data(File,MainTable):
         #Creating Datat Attributes Object
 
         for x in range(0,len(Data_list_object.VideoNames)):
-            rowCount=MainTable.rowCount()
-            #
-            Data_Attribute_object=DataClass.DataAttributes()
-            Data_Attribute_object.Links=Data_list_object.Links[x]
-            Data_Attribute_object.VideoNames=Data_list_object.VideoNames[x]
-            Data_Attribute_object.No_of_Views=Data_list_object.No_of_Views[x]
-            Data_Attribute_object.Likes=Data_list_object.Likes[x]
-            Data_Attribute_object.Dislikes=Data_list_object.Dislikes[x]
-            Data_Attribute_object.No_Of_Comments=Data_list_object.No_Of_Comments[x]
-            Data_Attribute_object.No_of_Subscribers=Data_list_object.No_of_Subscribers[x]
-            Data_Attribute_object.ChannelName=Data_list_object.ChannelName[x]
-            Data_Attribute_object.Date=Data_list_object.Date[x]
-            Data_Attribute_object.Duration=Data_list_object.Duration[x]
+            MainTable.insertRow(x+1)
+            Data_Attribute_object=CreatDataObject(Data_list_object.Links[x],Data_list_object.VideoNames[x],Data_list_object.No_of_Views[x],Data_list_object.Likes[x],Data_list_object.Dislikes[x],Data_list_object.No_Of_Comments[x],Data_list_object.No_of_Subscribers[x],Data_list_object.ChannelName[x],Data_list_object.Date[x],Data_list_object.Duration[x])
             #Storing Object in List ALL
-            Data_list_object.All.append(Data_Attribute_object)
-            #
-            MainTable.setItem(x,0,QTableWidgetItem(str(Data_list_object.VideoNames[x])))
-            MainTable.setItem(x,1,QTableWidgetItem(str(Data_list_object.No_of_Views[x])))
-            MainTable.setItem(x,2,QTableWidgetItem(str(Data_list_object.Likes[x])))
-            MainTable.setItem(x,3,QTableWidgetItem(str(Data_list_object.Dislikes[x])))
-            MainTable.setItem(x,4,QTableWidgetItem(str(Data_list_object.No_Of_Comments[x])))
-            MainTable.setItem(x,5,QTableWidgetItem(str(Data_list_object.No_of_Subscribers[x])))
-            MainTable.setItem(x,6,QTableWidgetItem(str(Data_list_object.ChannelName[x])))
-            MainTable.setItem(x,7,QTableWidgetItem(str(Data_list_object.Date[x])))
-            MainTable.setItem(x,8,QTableWidgetItem(str(Data_list_object.Duration[x])))
-            MainTable.insertRow(rowCount)
-    print(len(Data_list_object.All))
+            LoadData_Table_Object(MainTable,Data_Attribute_object,x)
+
+    dataFilter()
 
 def OpenLink(maintable):
     currentColumn=maintable.currentColumn()
     if(currentColumn==0):
-        link=Data_list_object.Links[maintable.currentRow()]
+        link=Data_list_object.All[maintable.currentRow()].Links
         if(len(link)<24):
             link="https://www.youtube.com/"+link
         webbrowser.open(link)
@@ -186,6 +160,8 @@ def Video_name(sorttype,Maintable,comboBox):
         _list=sortingAlgo.selection_sort(Data_list_object.All,sorttype,"VideoNames")
     elif(Algorithm=="Bubble Sort"):
         _list=sortingAlgo.Buble_sort(Data_list_object.All,sorttype,"VideoNames")
+    elif(Algorithm=="Counting Sort"):
+        _list=sortingAlgo.counting_sort(Data_list_object.All,sorttype,"VideoNames",str)
     UpdateData_Table(Maintable,_list)
 
 
@@ -200,10 +176,12 @@ def LoadData_Table_Object(MainTable,data,rowCount):
     MainTable.setItem(rowCount,7,QTableWidgetItem(str(data.Date)))
     MainTable.setItem(rowCount,8,QTableWidgetItem(str(data.Duration)))
 
-
 def UpdateData_Table(MainTable,Array):
-    rowCount=0
     for x in range(0,len(Array)):
-        print(Array[x].Duration)
-        LoadData_Table_Object(Table,Array[x],x)
+        LoadData_Table_Object(MainTable,Array[x],x)
 
+def dataFilter():
+    for x in range(0,len(Data_list_object.No_of_Subscribers)):
+        temp=Data_list_object.No_of_Subscribers[x]
+        temp=temp.removesuffix(' subscribers')
+        print(temp)
