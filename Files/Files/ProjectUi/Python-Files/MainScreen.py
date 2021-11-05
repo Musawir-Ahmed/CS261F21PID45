@@ -22,8 +22,8 @@ from Modules import sortingAlgo
 
 class Ui_MainWindow(object):
 
-    def searchresult(self,occurlist):
-        print(occurlist)
+    def searchresult(self,occurlist,algo):
+        self.SearchingAlgo.setText(algo)
         for i in range(len(occurlist)):
             for j in range(9):
                 self.MainTable.item(occurlist[i],j).setBackground(QtGui.QColor(255,0,0))
@@ -157,6 +157,8 @@ class Ui_MainWindow(object):
         self.PlotGraphButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.PlotGraphButton_2.setGeometry(QtCore.QRect(960, 90, 235, 31))
         self.PlotGraphButton_2.setObjectName("PlotGraphButton_2")
+        self.PlotGraphButton_2.clicked.connect(lambda: MainscreenFunctions.print_file(self.DataLoadcomboBox))
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(20, 50, 321, 61))
         self.label_2.setText("")
@@ -402,11 +404,11 @@ class Ui_MainWindow(object):
         #
         self.VideoNam_sortAsecending.setFont(font)
         self.VideoNam_sortAsecending.setObjectName("VideoNam_sortAsecending")
-        self.VideoNam_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str))
+        self.VideoNam_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str,self.SortAlgo,self.TimetoSort))
 
         self.VideoNam_sortdescending = QtWidgets.QToolButton(self.centralwidget)
         self.VideoNam_sortdescending.setGeometry(QtCore.QRect(116, 160, 25, 23))
-        self.VideoNam_sortdescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str))
+        self.VideoNam_sortdescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str,self.SortAlgo,self.TimetoSort))
         #
         ##
         ###
@@ -423,7 +425,7 @@ class Ui_MainWindow(object):
         self.Views_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Views_sortAsecending.setGeometry(QtCore.QRect(268, 160, 25, 23))
         #Apply funtion sort
-        self.Views_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int))
+        self.Views_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -438,7 +440,7 @@ class Ui_MainWindow(object):
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.Views_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int))
+        self.Views_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int,self.SortAlgo,self.TimetoSort))
 
         self.Views_sortDescending.setFont(font)
         self.Views_sortDescending.setObjectName("Views_sortDescending")
@@ -449,12 +451,12 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.Likes_sortAsecending.setFont(font)
-        self.Likes_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int))
+        self.Likes_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int,self.SortAlgo,self.TimetoSort))
 
         self.Likes_sortAsecending.setObjectName("Likes_sortAsecending")
         self.Likes_sortDescending = QtWidgets.QToolButton(self.centralwidget)
         self.Likes_sortDescending.setGeometry(QtCore.QRect(370, 160, 25, 23))
-        self.Likes_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int))
+        self.Likes_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -475,14 +477,14 @@ class Ui_MainWindow(object):
         self.Dislikes_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.Dislikes_sortDesecending.setGeometry(QtCore.QRect(496, 160, 25, 23))
 
-        self.Dislikes_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int))
+        self.Dislikes_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
 
-        self.Dislikes_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int))
+        self.Dislikes_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int,self.SortAlgo,self.TimetoSort))
 
         self.Dislikes_sortDesecending.setFont(font)
         self.Dislikes_sortDesecending.setObjectName("Dislikes_sortDesecending")
@@ -494,11 +496,11 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.Coments_sotrDescesding_2.setFont(font)
         self.Coments_sotrDescesding_2.setObjectName("Coments_sotrDescesding_2")
-        self.Coments_sotrDescesding_2.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int))
+        self.Coments_sotrDescesding_2.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int,self.SortAlgo,self.TimetoSort))
 
         self.Coments_sotrAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Coments_sotrAsecending.setGeometry(QtCore.QRect(648, 160, 25, 23))
-        self.Coments_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int))
+        self.Coments_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -508,7 +510,7 @@ class Ui_MainWindow(object):
         self.Coments_sotrAsecending.setObjectName("Coments_sotrAsecending")
         self.Suscribers_sotrDescesding = QtWidgets.QToolButton(self.centralwidget)
         self.Suscribers_sotrDescesding.setGeometry(QtCore.QRect(749, 160, 25, 23))
-        self.Suscribers_sotrDescesding.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int))
+        self.Suscribers_sotrDescesding.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -518,7 +520,7 @@ class Ui_MainWindow(object):
         self.Suscribers_sotrDescesding.setObjectName("Suscribers_sotrDescesding")
         self.Suscribers_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Suscribers_sortAsecending.setGeometry(QtCore.QRect(774, 160, 25, 23))
-        self.Suscribers_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int))
+        self.Suscribers_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -528,7 +530,7 @@ class Ui_MainWindow(object):
         self.Suscribers_sortAsecending.setObjectName("Suscribers_sortAsecending")
         self.Channelname_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.Channelname_sortDesecending.setGeometry(QtCore.QRect(875, 160, 25, 23))
-        self.Channelname_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str))
+        self.Channelname_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -538,7 +540,7 @@ class Ui_MainWindow(object):
         self.Channelname_sortDesecending.setObjectName("Channelname_sortDesecending")
         self.ChannelName_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.ChannelName_sortAsecending.setGeometry(QtCore.QRect(900, 160, 25, 23))
-        self.ChannelName_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str))
+        self.ChannelName_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -548,7 +550,7 @@ class Ui_MainWindow(object):
         self.ChannelName_sortAsecending.setObjectName("ChannelName_sortAsecending")
         self.PublishingDate_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.PublishingDate_sortDesecending.setGeometry(QtCore.QRect(1005, 160, 25, 23))
-        self.PublishingDate_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int))
+        self.PublishingDate_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -558,7 +560,7 @@ class Ui_MainWindow(object):
         self.PublishingDate_sortDesecending.setObjectName("PublishingDate_sortDesecending")
         self.PublishingDate_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.PublishingDate_sortAsecending.setGeometry(QtCore.QRect(1030, 160, 25, 23))
-        self.PublishingDate_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int))
+        self.PublishingDate_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int,self.SortAlgo,self.TimetoSort))
 
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -656,12 +658,12 @@ class Ui_MainWindow(object):
         self.MainTable.setSortingEnabled(False)
         self.MainTable.setSortingEnabled(__sortingEnabled)
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Time Took To Sort :-</span></p></body></html>"))
-        self.TimetoSort.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">3ms<br/></span></p></body></html>"))
-        self.SortAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Merge Sort</span></p></body></html>"))
+        self.TimetoSort.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/></span></p></body></html>"))
+        self.SortAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"></span></p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Sorting Algorithm  :-</span></p></body></html>"))
         self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Total Search Results :-</span></p></body></html>"))
         self.TimeTosearch.setText(_translate("MainWindow", ""))
-        self.SearchingAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Binary Search<br/></span></p></body></html>"))
+        self.SearchingAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/></span></p></body></html>"))
         self.label_13.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Searching Algorithm :-</span></p></body></html>"))
         self.VideoNam_sortAsecending.setText(_translate("MainWindow", "↓"))
         self.VideoNam_sortdescending.setText(_translate("MainWindow", " ↑ "))

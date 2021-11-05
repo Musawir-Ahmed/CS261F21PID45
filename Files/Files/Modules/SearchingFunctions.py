@@ -25,4 +25,4 @@ def AddtoExpression(keyword, columntext, Expression_label):
 def SearchExpression(expression, mainref,algo):
     key = expression.split()
     occurList = searchingAlgo.linear_search(DataList.All,key,columns)
-    mainref.searchresult(occurList)
+    mainref.searchresult(occurList,algo)

@@ -11,10 +11,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import pandas as pd 
 import webbrowser
 import random
-import copy
+import copy,time
+import os
+import threading
 from threading import Thread
 from datetime import date
-
+import sys
+sys.path.insert(1, 'Files\Files')
 #Declaring Data list Object Globally
 Data_list_object=None
 Data_list_object=DataClass.DataList()
@@ -23,6 +26,7 @@ Data_list_object=DataClass.DataList()
 Data_Attribute_object=None
 ##Declares When The Programs Starts
 Table=None
+
 
 def AppendData_To_List(data):
     Data_list_object.Links.append(data[0])
@@ -165,51 +169,60 @@ def Load_Data(File,MainTable):
             #Storing Object in List ALL
             LoadData_Table_Object(MainTable,Data_Attribute_object,x)
 
-
-
 def OpenLink(maintable):
     currentColumn=maintable.currentColumn()
     if(currentColumn==0):
         link=Data_list_object.All[maintable.currentRow()].Links
-        print(Data_list_object.All[maintable.currentRow()].VideoNames)
         if(len(link)<24):
             link="https://www.youtube.com/"+link
         webbrowser.open(link)
 
-def sort_control(sorttype,Maintable,comboBox,attribute,type):
+def sort_control(sorttype,Maintable,comboBox,attribute,type,SortAlgo,TimetoSort):
     _list=None
     Algorithm=comboBox.currentText()
+    starttime = time.time()
     if(Algorithm=="Selection Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.selection_sort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Bubble Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.Buble_sort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Counting Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.counting_sort(Data_list_object.All,sorttype,attribute,type)
     elif(Algorithm=="Shell Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.shellsort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Comb Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.Combsort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Cycle Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.cyclesort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Insertion Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.insertion_Sort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Merge Sort"):
+        SortAlgo.setText(Algorithm)
         random.shuffle(Data_list_object.All)
-        thread = Thread(target=sortingAlgo.MergeSort_Controller, args=(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,attribute))
-        thread.start()
-        _list = thread.join()
-        # _list=sortingAlgo.MergeSort_Controller(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,attribute)
+        _list=sortingAlgo.MergeSort_Controller(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,attribute)
     elif(Algorithm=="Quick Sort"):
+        SortAlgo.setText(Algorithm)
         random.shuffle(Data_list_object.All)
         _list=sortingAlgo.quick_sort_controller(Data_list_object.All,0,len(Data_list_object.All)-1,sorttype,attribute)
     elif(Algorithm=="Strand Sort"):
+        SortAlgo.setText(Algorithm)
         temp=copy.deepcopy(Data_list_object.All)
         _list=sortingAlgo.strand_Sort(temp,sorttype,attribute)
     elif(Algorithm=="Pigeonhole Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.pigeonhole_Sort(Data_list_object.All,sorttype,attribute)
     elif(Algorithm=="Cocktail Sort"):
+        SortAlgo.setText(Algorithm)
         _list=sortingAlgo.cocktail_Sort(Data_list_object.All,sorttype,attribute)
     Data_list_object.All=_list
+    final = int((time.time()-starttime)*1000)
+    TimetoSort.setText(str(final)+"ms")
     UpdateData_Table(Maintable,_list)
 
 def LoadData_Table_Object(MainTable,data,rowCount):
@@ -227,43 +240,5 @@ def UpdateData_Table(MainTable,Array):
     for x in range(0,len(Array)):
         LoadData_Table_Object(MainTable,Array[x],x)
 
-
-# def date_filter():
-#     for x in range(0,len(Data_list_object.Date)):
-#         orig=Data_list_object.Date[x]
-#         date=Data_list_object.Date[x]
-#         month=None
-#         day=None
-#         year=None
-#         if (date[0].isdigit()):
-#             index=date.find("-")
-#             day=date[:index]
-#             date=date[index+1:]
-#             index=date.find("-")
-#             month=DataFilter.get_Month_value(date[:index])
-#             date=date[index+1:]
-#             year=DataFilter.get_year_value(date)
-#         else:
-#             date=date[-12:]
-#             index=date.find(" ")
-#             month=DataFilter.get_Month_value(date[:index])
-#             date=date[index+1:]
-#             index=date.find(",")
-#             day=date[:index]
-#             date=date[index+2:]
-#             year=DataFilter.get_year_value(date)
-
-#         if not(day.isdigit()):
-#             current_time = datetime.datetime.now()
-#             year=current_time.year
-#             month=current_time.month 
-#             day=current_time.day
-#         year=int(year)
-#         month=int(month)
-#         day=int(day)
-
-#         if(x==100):
-#             break
-#         print(orig)
-#         print("Here",year, month, day)
-#         print(datetime.datetime(year, month, day))
+def print_file(filename):
+    os.startfile('Files\\Files\\ScrapedData\\'+filename.text(),"print")

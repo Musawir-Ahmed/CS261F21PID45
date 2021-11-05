@@ -253,7 +253,7 @@ class Ui_GraphScreen(object):
 
     def PlotGraph(self,graphtype,col1,col2):
         starttime = time.time()
-        df = pd.read_csv("C:\MyData\GitRepos\CS261F21PID45\Files\Files\ScrapedData\ScrapData.csv")
+        df = pd.read_csv("Files\Files\ScrapedData\ScrapData.csv")
         row1 = list(df)
         ### getting list from data frame 
         ##

@@ -303,6 +303,7 @@ def selection_sort(Array,sorttype,attribute):
 #
 #buuble sort algorithm
 def Buble_sort(Array,sorttype,attribute):
+    print("HERE LENGTH",len(Array) )
     for x  in range(0,len(Array)):
         expression=None
     if(sorttype=="Ascending"):
