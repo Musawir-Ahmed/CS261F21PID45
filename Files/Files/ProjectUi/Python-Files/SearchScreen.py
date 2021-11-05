@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+sys.path.insert(1, 'Files\Files')
 
+from Modules import SearchingFunctions
 
 class Ui_SearchFilterWindow(object):
 
@@ -18,12 +21,17 @@ class Ui_SearchFilterWindow(object):
         global MainWindowefrence
         MainWindowefrence=main_win_refrence
 
+    wind = None
+    def storemainobjectref(self,obj):
+        global wind
+        wind = obj
 
     #Funtion To Open SearchFilter Screen
     def BackToMain(self):
-        self.window2=QtWidgets.QMainWindow()
-        self.ui=MainWindowefrence()
-        self.ui.setupUi(self.window2)
+        print("")
+        self.window2=MainWindowefrence
+        #self.ui=MainWindowefrence
+        #self.ui.setupUi(self.window2)
         self.window2.show()
     #End
 
@@ -178,6 +186,10 @@ class Ui_SearchFilterWindow(object):
         self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_7.setGeometry(QtCore.QRect(904, 280, 221, 31))
         self.pushButton_7.setObjectName("pushButton_7")
+        ###
+        ##
+        ###
+        self.pushButton_7.clicked.connect(lambda: SearchingFunctions.AddtoExpression(self.texteditor_searchfilter.text(),self.SealectColumncomboBox_searchfilter.currentText(),self.Expression_label))
         self.StringFiltercomboBox = QtWidgets.QComboBox(self.centralwidget)
         self.StringFiltercomboBox.setGeometry(QtCore.QRect(30, 340, 111, 31))
         self.StringFiltercomboBox.setObjectName("StringFiltercomboBox")
@@ -229,6 +241,17 @@ class Ui_SearchFilterWindow(object):
         self.SrachAlgo_PushButton = QtWidgets.QPushButton(self.centralwidget)
         self.SrachAlgo_PushButton.setGeometry(QtCore.QRect(904, 530, 221, 31))
         self.SrachAlgo_PushButton.setObjectName("SrachAlgo_PushButton")
+        ###
+        ##
+        ###
+        self.SrachAlgo_PushButton.clicked.connect(lambda: SearchingFunctions.SearchExpression(self.Expression_label.text(),wind,self.SearchAlgorithm_comboBox.currentText()))
+        self.SrachAlgo_PushButton.clicked.connect (SearchingFunctions.clearcolumns)
+        self.SrachAlgo_PushButton.clicked.connect(self.BackToMain)
+        self.SrachAlgo_PushButton.clicked.connect(MainWindow.hide)
+
+        ###
+        ##
+        ###
         self.SelectColumn_StringFilter = QtWidgets.QComboBox(self.centralwidget)
         self.SelectColumn_StringFilter.setGeometry(QtCore.QRect(350, 340, 211, 31))
         self.SelectColumn_StringFilter.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -323,16 +346,15 @@ class Ui_SearchFilterWindow(object):
         self.BackButton.setText(_translate("MainWindow", "←"))
         self.BackButton.setShortcut(_translate("MainWindow", "Backspace"))
         self.label_13.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt;\">Search Filter</span></p></body></html>"))
-        self.texteditor_searchfilter.setText(_translate("MainWindow", "Enter Text"))
         self.texteditor_searchfilter.setPlaceholderText(_translate("MainWindow", " Search In The Table"))
         self.SealectColumncomboBox_searchfilter.setItemText(0, _translate("MainWindow", "Select Column...."))
-        self.SealectColumncomboBox_searchfilter.setItemText(1, _translate("MainWindow", "Video Name"))
-        self.SealectColumncomboBox_searchfilter.setItemText(2, _translate("MainWindow", "Views"))
+        self.SealectColumncomboBox_searchfilter.setItemText(1, _translate("MainWindow", "VideoNames"))
+        self.SealectColumncomboBox_searchfilter.setItemText(2, _translate("MainWindow", "No_of_Views"))
         self.SealectColumncomboBox_searchfilter.setItemText(3, _translate("MainWindow", "Likes"))
         self.SealectColumncomboBox_searchfilter.setItemText(4, _translate("MainWindow", "Dislikes"))
-        self.SealectColumncomboBox_searchfilter.setItemText(5, _translate("MainWindow", "No.# Comments"))
-        self.SealectColumncomboBox_searchfilter.setItemText(6, _translate("MainWindow", "Suscribers"))
-        self.SealectColumncomboBox_searchfilter.setItemText(7, _translate("MainWindow", "Channels Name"))
+        self.SealectColumncomboBox_searchfilter.setItemText(5, _translate("MainWindow", "No_Of_Comments"))
+        self.SealectColumncomboBox_searchfilter.setItemText(6, _translate("MainWindow", "No_of_Subscribers"))
+        self.SealectColumncomboBox_searchfilter.setItemText(7, _translate("MainWindow", "ChannelName"))
         self.SelectFilter_comboBox.setItemText(0, _translate("MainWindow", "Select Filter....."))
         self.SelectFilter_comboBox.setItemText(1, _translate("MainWindow", "None"))
         self.SelectFilter_comboBox.setItemText(2, _translate("MainWindow", "And"))
@@ -355,7 +377,6 @@ class Ui_SearchFilterWindow(object):
         self.label_14.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600;\">-</span></p></body></html>"))
         self.pushButton_9.setText(_translate("MainWindow", "⎌ Undo"))
         self.label_15.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">Expression For Searching</span></p></body></html>"))
-        self.Expression_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600; font-style:italic;\">Unboxing And 386 Or 1M</span></p></body></html>"))
         self.SearchAlgorithm_comboBox.setItemText(0, _translate("MainWindow", "Searching Algorithm"))
         self.SearchAlgorithm_comboBox.setItemText(1, _translate("MainWindow", "Binary Search"))
         self.SearchAlgorithm_comboBox.setItemText(2, _translate("MainWindow", "Linear Search"))

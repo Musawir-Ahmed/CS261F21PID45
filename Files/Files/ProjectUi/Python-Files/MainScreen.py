@@ -21,9 +21,18 @@ from Modules import MainscreenFunctions
 from Modules import sortingAlgo
 
 class Ui_MainWindow(object):
+
+    def searchresult(self,occurlist):
+        print(occurlist)
+        for i in range(len(occurlist)):
+            for j in range(9):
+                self.MainTable.item(occurlist[i],j).setBackground(QtGui.QColor(255,0,0))
+        self.TimeTosearch.setText(str(len(occurlist)))
+
     #Funtion To Open SearchFilter Screen
-    def SearchScreen(self):
-        Ui_SearchFilterWindow.store_mainrefrence("s",Ui_MainWindow)
+    def SearchScreen(self,ui,main):
+        Ui_SearchFilterWindow.store_mainrefrence("s",ui)
+        Ui_SearchFilterWindow.storemainobjectref("s",main)
         self.window2=QtWidgets.QMainWindow()
         self.ui=Ui_SearchFilterWindow()
         self.ui.setupUi(self.window2)
@@ -31,8 +40,8 @@ class Ui_MainWindow(object):
     #End
 
     # Function to open Graph plotting Screen
-    def GraphPltScreen(self):
-        Ui_GraphScreen.store_mainrefrence("s",Ui_MainWindow)
+    def GraphPltScreen(self,ui):
+        Ui_GraphScreen.store_mainrefrence("s",ui)
         self.window3 = QtWidgets.QMainWindow()
         self.ui = Ui_GraphScreen()
         self.ui.setupUi(self.window3)
@@ -117,7 +126,8 @@ class Ui_MainWindow(object):
         self.SearchFilterButton = QtWidgets.QPushButton(self.centralwidget)
         self.SearchFilterButton.setGeometry(QtCore.QRect(960, 50, 141, 31))
         self.SearchFilterButton.setObjectName("SearchFilterButton")
-        self.SearchFilterButton.clicked.connect(self.SearchScreen)
+        print(type(ui))
+        self.SearchFilterButton.clicked.connect(lambda:self.SearchScreen(MainWindow,ui))
         self.SearchFilterButton.clicked.connect(MainWindow.hide)
         ####Here to connect to graph plotting window
         ##
@@ -125,7 +135,7 @@ class Ui_MainWindow(object):
         self.PlotGraphButton = QtWidgets.QPushButton(self.centralwidget)
         self.PlotGraphButton.setGeometry(QtCore.QRect(570, 90, 341, 31))
         self.PlotGraphButton.setObjectName("PlotGraphButton")
-        self.PlotGraphButton.clicked.connect(self.GraphPltScreen)
+        self.PlotGraphButton.clicked.connect(lambda:self.GraphPltScreen(MainWindow))
         self.PlotGraphButton.clicked.connect(MainWindow.hide)
         ###
         ##
@@ -649,8 +659,8 @@ class Ui_MainWindow(object):
         self.TimetoSort.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">3ms<br/></span></p></body></html>"))
         self.SortAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Merge Sort</span></p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Sorting Algorithm  :-</span></p></body></html>"))
-        self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Time TooK To Search :-</span></p></body></html>"))
-        self.TimeTosearch.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">2ms</span></p></body></html>"))
+        self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Total Search Results :-</span></p></body></html>"))
+        self.TimeTosearch.setText(_translate("MainWindow", ""))
         self.SearchingAlgo.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Binary Search<br/></span></p></body></html>"))
         self.label_13.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Searching Algorithm :-</span></p></body></html>"))
         self.VideoNam_sortAsecending.setText(_translate("MainWindow", "↓"))
@@ -678,5 +688,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+    #widgets = QtWidgets.QStackedWidget()
+    #widgets.addWidget(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

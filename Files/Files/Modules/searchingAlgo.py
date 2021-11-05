@@ -1,11 +1,16 @@
 import math
 ## linear search
-def linear_search(A,key):
+def linear_search(AllObjects,key,column):
+    print(len(key))
+    expression = "(getattr(AllObjects[i],column[j]))"
     occurences = []
-    for i in range(len(A)):
-        if A[i] == key:
-            occurences.append(i)
+    for j in range(len(key)):
+        for i in range(len(AllObjects)):
+            string=str(eval(expression))
+            if (key[j]) in string:
+                occurences.append(i)
     return occurences
+    
 ### Binary Search
 ##
 #

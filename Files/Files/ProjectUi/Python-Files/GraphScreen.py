@@ -14,6 +14,7 @@ import pyqtgraph as pg
 import numpy as np
 from pyqtgraph.graphicsItems.ScatterPlotItem import Symbols
 import GraphScreen
+import time
 
 
 class Ui_GraphScreen(object):
@@ -25,9 +26,9 @@ class Ui_GraphScreen(object):
 
     #Funtion To Open SearchFilter Screen
     def BackToMain(self):
-        self.window2=QtWidgets.QMainWindow()
-        self.ui=MainWindowRefrence()
-        self.ui.setupUi(self.window2)
+        self.window2=MainWindowRefrence
+        #self.ui=
+        #self.ui.setupUi(self.window2)
         self.window2.show()
     #End
         
@@ -136,7 +137,7 @@ class Ui_GraphScreen(object):
         self.label_7.setTextFormat(QtCore.Qt.RichText)
         self.label_7.setObjectName("label_7")
         self.pltTime = QtWidgets.QLabel(self.centralwidget)
-        self.pltTime.setGeometry(QtCore.QRect(930, 145, 31, 31))
+        self.pltTime.setGeometry(QtCore.QRect(930, 145, 150, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.pltTime.setFont(font)
@@ -243,7 +244,7 @@ class Ui_GraphScreen(object):
         self.comboBox_3.setItemText(5, _translate("GraphScreen", "Views"))
         self.label_6.setText(_translate("GraphScreen", "Plotted Graph"))
         self.label_7.setText(_translate("GraphScreen", "Time Taken To Plot Graph: "))
-        self.pltTime.setText(_translate("GraphScreen", "0ms"))
+        self.pltTime.setText(_translate("GraphScreen", "ms"))
         self.PlotGraphButton.setText(_translate("GraphScreen", "PLOT"))
         self.label_8.setText(_translate("GraphScreen", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600; text-decoration: underline;\">_____Path:- Main &gt; Plot Graph</span></p></body></html>"))
         self.commandLinkButton_2.setToolTip(_translate("GraphScreen", "<html><head/><body><p align=\"center\"><span style=\" font-family:\'Source Sans Pro,Roboto,San Francisco,Segoe UI,sans-serif\'; font-size:140px; font-weight:400; color:#df000f; background-color:#ffffff;\">←</span></p></body></html>"))
@@ -251,7 +252,7 @@ class Ui_GraphScreen(object):
         self.commandLinkButton_2.setShortcut(_translate("GraphScreen", "Backspace"))
 
     def PlotGraph(self,graphtype,col1,col2):
-        self.graphwidget.plotItem.clear
+        starttime = time.time()
         df = pd.read_csv("C:\MyData\GitRepos\CS261F21PID45\Files\Files\ScrapedData\ScrapData.csv")
         row1 = list(df)
         ### getting list from data frame 
@@ -291,6 +292,8 @@ class Ui_GraphScreen(object):
             self.plotline(col1_list,col2_list)
         elif graphtype == "Scatter Plot":
             self.plotscatter(col1_list,col2_list)
+        final = int((time.time()-starttime)*1000)
+        self.pltTime.setText(str(final)+"ms")
     
     def cleanViews(self,arr):
         count = 0
@@ -360,10 +363,10 @@ class Ui_GraphScreen(object):
             arr[count] = int(num)
             count+=1
     def plotline(self,y_arr,x_arr):
-        self.graphwidget.plotItem.clear
+        self.graphwidget.plotItem.clear()
         self.graphwidget.plotItem.plot(y_arr,x_arr)
     def plotscatter(self,y_arr,x_arr):
-        self.graphwidget.plotItem.clear
+        self.graphwidget.plotItem.clear()
         x = np.array(x_arr)
         y = np.array(y_arr)
         self.graphwidget.plotItem.plot(x,y,pen=None, symbol = 'x')
