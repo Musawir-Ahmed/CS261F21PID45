@@ -392,14 +392,18 @@ class Ui_MainWindow(object):
         #
         self.VideoNam_sortAsecending.setFont(font)
         self.VideoNam_sortAsecending.setObjectName("VideoNam_sortAsecending")
-        self.VideoNam_sortAsecending.clicked.connect(lambda: MainscreenFunctions.Video_name("Ascending",self.MainTable,self.SelectAlgorithmcomboBox))
+        self.VideoNam_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str))
 
         self.VideoNam_sortdescending = QtWidgets.QToolButton(self.centralwidget)
         self.VideoNam_sortdescending.setGeometry(QtCore.QRect(116, 160, 25, 23))
-        self.VideoNam_sortdescending.clicked.connect(lambda: MainscreenFunctions.Video_name("desending",self.MainTable,self.SelectAlgorithmcomboBox))
+        self.VideoNam_sortdescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"VideoNames",str))
         #
         ##
         ###
+
+
+        ###Applying Events On view sort button
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -408,18 +412,24 @@ class Ui_MainWindow(object):
         self.VideoNam_sortdescending.setObjectName("VideoNam_sortdescending")
         self.Views_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Views_sortAsecending.setGeometry(QtCore.QRect(268, 160, 25, 23))
+        #Apply funtion sort
+        self.Views_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         self.Views_sortAsecending.setFont(font)
         self.Views_sortAsecending.setObjectName("Views_sortAsecending")
+        #Apply funtion sort
         self.Views_sortDescending = QtWidgets.QToolButton(self.centralwidget)
         self.Views_sortDescending.setGeometry(QtCore.QRect(243, 160, 25, 23))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
+        self.Views_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Views",int))
+
         self.Views_sortDescending.setFont(font)
         self.Views_sortDescending.setObjectName("Views_sortDescending")
         self.Likes_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
@@ -429,15 +439,21 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.Likes_sortAsecending.setFont(font)
+        self.Likes_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int))
+
         self.Likes_sortAsecending.setObjectName("Likes_sortAsecending")
         self.Likes_sortDescending = QtWidgets.QToolButton(self.centralwidget)
         self.Likes_sortDescending.setGeometry(QtCore.QRect(370, 160, 25, 23))
+        self.Likes_sortDescending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Likes",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         self.Likes_sortDescending.setFont(font)
         self.Likes_sortDescending.setObjectName("Likes_sortDescending")
+
+
         self.Dislikes_sotrAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Dislikes_sotrAsecending.setGeometry(QtCore.QRect(521, 160, 25, 23))
         font = QtGui.QFont()
@@ -448,10 +464,16 @@ class Ui_MainWindow(object):
         self.Dislikes_sotrAsecending.setObjectName("Dislikes_sotrAsecending")
         self.Dislikes_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.Dislikes_sortDesecending.setGeometry(QtCore.QRect(496, 160, 25, 23))
+
+        self.Dislikes_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
+
+        self.Dislikes_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Dislikes",int))
+
         self.Dislikes_sortDesecending.setFont(font)
         self.Dislikes_sortDesecending.setObjectName("Dislikes_sortDesecending")
         self.Coments_sotrDescesding_2 = QtWidgets.QToolButton(self.centralwidget)
@@ -462,8 +484,12 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.Coments_sotrDescesding_2.setFont(font)
         self.Coments_sotrDescesding_2.setObjectName("Coments_sotrDescesding_2")
+        self.Coments_sotrDescesding_2.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int))
+
         self.Coments_sotrAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Coments_sotrAsecending.setGeometry(QtCore.QRect(648, 160, 25, 23))
+        self.Coments_sotrAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_Of_Comments",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -472,6 +498,8 @@ class Ui_MainWindow(object):
         self.Coments_sotrAsecending.setObjectName("Coments_sotrAsecending")
         self.Suscribers_sotrDescesding = QtWidgets.QToolButton(self.centralwidget)
         self.Suscribers_sotrDescesding.setGeometry(QtCore.QRect(749, 160, 25, 23))
+        self.Suscribers_sotrDescesding.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -480,6 +508,8 @@ class Ui_MainWindow(object):
         self.Suscribers_sotrDescesding.setObjectName("Suscribers_sotrDescesding")
         self.Suscribers_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.Suscribers_sortAsecending.setGeometry(QtCore.QRect(774, 160, 25, 23))
+        self.Suscribers_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"No_of_Subscribers",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -488,6 +518,8 @@ class Ui_MainWindow(object):
         self.Suscribers_sortAsecending.setObjectName("Suscribers_sortAsecending")
         self.Channelname_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.Channelname_sortDesecending.setGeometry(QtCore.QRect(875, 160, 25, 23))
+        self.Channelname_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -496,6 +528,8 @@ class Ui_MainWindow(object):
         self.Channelname_sortDesecending.setObjectName("Channelname_sortDesecending")
         self.ChannelName_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.ChannelName_sortAsecending.setGeometry(QtCore.QRect(900, 160, 25, 23))
+        self.ChannelName_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"ChannelName",str))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -504,6 +538,8 @@ class Ui_MainWindow(object):
         self.ChannelName_sortAsecending.setObjectName("ChannelName_sortAsecending")
         self.PublishingDate_sortDesecending = QtWidgets.QToolButton(self.centralwidget)
         self.PublishingDate_sortDesecending.setGeometry(QtCore.QRect(1005, 160, 25, 23))
+        self.PublishingDate_sortDesecending.clicked.connect(lambda: MainscreenFunctions.sort_control("desending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -512,28 +548,26 @@ class Ui_MainWindow(object):
         self.PublishingDate_sortDesecending.setObjectName("PublishingDate_sortDesecending")
         self.PublishingDate_sortAsecending = QtWidgets.QToolButton(self.centralwidget)
         self.PublishingDate_sortAsecending.setGeometry(QtCore.QRect(1030, 160, 25, 23))
+        self.PublishingDate_sortAsecending.clicked.connect(lambda: MainscreenFunctions.sort_control("Ascending",self.MainTable,self.SelectAlgorithmcomboBox,"Date_Comparison",int))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         self.PublishingDate_sortAsecending.setFont(font)
         self.PublishingDate_sortAsecending.setObjectName("PublishingDate_sortAsecending")
-        self.Duration_sort_Asecending = QtWidgets.QToolButton(self.centralwidget)
-        self.Duration_sort_Asecending.setGeometry(QtCore.QRect(1155, 160, 25, 23))
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.Duration_sort_Asecending.setFont(font)
-        self.Duration_sort_Asecending.setObjectName("Duration_sort_Asecending")
-        self.Duration_sort_Desecending = QtWidgets.QToolButton(self.centralwidget)
-        self.Duration_sort_Desecending.setGeometry(QtCore.QRect(1130, 160, 25, 23))
+
+
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.Duration_sort_Desecending.setFont(font)
-        self.Duration_sort_Desecending.setObjectName("Duration_sort_Desecending")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -635,8 +669,6 @@ class Ui_MainWindow(object):
         self.ChannelName_sortAsecending.setText(_translate("MainWindow", "↓"))
         self.PublishingDate_sortDesecending.setText(_translate("MainWindow", " ↑ "))
         self.PublishingDate_sortAsecending.setText(_translate("MainWindow", "↓"))
-        self.Duration_sort_Asecending.setText(_translate("MainWindow", "↓"))
-        self.Duration_sort_Desecending.setText(_translate("MainWindow", " ↑ "))
 
 
 

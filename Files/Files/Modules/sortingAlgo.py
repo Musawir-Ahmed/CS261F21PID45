@@ -317,7 +317,7 @@ def Buble_sort(Array,sorttype,attribute):
                 temp=Array[y]
                 Array[y]=Array[x]
                 Array[x]=temp
-
+    
     return Array
 
 def check(value):
